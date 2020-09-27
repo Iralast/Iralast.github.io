@@ -61,9 +61,10 @@ function loadScene()
     cylinder.position.z = -100;
     cylinder.position.y = 15/2;
     
-    //base.add( new THREE.AxisHelper(200));
+    
     var base = new THREE.Object3D();
     base.add(cylinder);
+    base.add( new THREE.AxisHelper(200));
 
     //Brazo
     var brazo = new THREE.Object3D();
@@ -155,6 +156,59 @@ function loadScene()
 
     mano.add(cylinderMano);
 
+    var pinza = new THREE.Geometry();
+    var vertices = [
+                        -90, cylinderMano.position.y+10, -90, //arriba derecha
+                        -90, cylinderMano.position.y+10, -90+4, //arriba izquierda
+                        -90, cylinderMano.position.y-10, -90, //abajo derecha
+                        -90, cylinderMano.position.y-10, -90+4, //abajo izquierda
+                        -90+19, cylinderMano.position.y+10, -90, //arriba fuera derecha
+                        -90+19, cylinderMano.position.y+10, -90+4, //arriba fuera izquierda
+                        -90+19, cylinderMano.position.y-10, -90, //abajo fuera derecha
+                        -90+19, cylinderMano.position.y-10, -90+4 //abajo fuera izquierda
+    ];
+
+    var colores = [
+                    0x000000,
+                    0x000000,
+                    0x000000,
+                    0x000000,
+                    0x000000,
+                    0x000000,
+                    0x000000,
+                    0x000000
+    ];
+
+    var indices = [
+                        0,1,2, 7,3,4, 0,1,2,
+                        0,2,3, 4,3,2, 4,2,5,
+                        6,7,4, 6,4,5, 1,5,2,
+                        1,6,5, 7,6,1, 7,1,0
+    ];
+
+
+    for(var i =0; i < vertices.length; i+=3)
+    {
+        var vertice = new THREE.Vector3(vertices[i],vertices[i+1], vertices[i+2]);
+        pinza.vertices.push(vertice);
+    }
+
+    for(var i = 0; i < indices.length; i+=3)
+    {
+        var triangulo = new THREE.Face3(indices[i], indices[i+1], indices[i+2]);
+
+        for(var j = 0; j < 3; j++)
+        {
+            var color = new THREE.Color(colores[indices[i+j]]);
+            triangulo.vertexColors.push(color);
+        }
+
+        pinza.faces.push(triangulo);
+    }
+
+
+    var pinzaFinal = new THREE.Mesh(pinza, material);
+    mano.add(pinzaFinal);
     antebrazo.add(mano);
     brazo.add(antebrazo);
     base.add(brazo);
