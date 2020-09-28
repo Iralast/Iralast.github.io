@@ -31,11 +31,11 @@ function init()
 
     //Camara
     var ar = window.innerWidth/window.innerHeight;
-    camera = new THREE.PerspectiveCamera(35, ar, 0.1, 10000);
+    camera = new THREE.PerspectiveCamera(30, ar, 0.1, 10000);
     scene.add(camera);
     camera.position.set(300,300,300);
     
-    camera.lookAt(new THREE.Vector3(0,200,0));
+    camera.lookAt(new THREE.Vector3(0,150,0));
 }
 
 function loadScene()
