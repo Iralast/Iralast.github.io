@@ -31,11 +31,11 @@ function init()
 
     //Camara
     var ar = window.innerWidth/window.innerHeight;
-    camera = new THREE.PerspectiveCamera(40, ar, 0.1, 10000);
+    camera = new THREE.PerspectiveCamera(35, ar, 0.1, 10000);
     scene.add(camera);
     camera.position.set(300,300,300);
     
-    camera.lookAt(new THREE.Vector3(0,100,0));
+    camera.lookAt(new THREE.Vector3(0,200,0));
 }
 
 function loadScene()
@@ -64,7 +64,7 @@ function loadScene()
     
     var base = new THREE.Object3D();
     base.add(cylinder);
-    base.add( new THREE.AxisHelper(200));
+    //base.add( new THREE.AxisHelper(200));
 
     //Brazo
     var brazo = new THREE.Object3D();
@@ -157,58 +157,130 @@ function loadScene()
     mano.add(cylinderMano);
 
     var pinza = new THREE.Geometry();
-    var vertices = [
-                        -90, cylinderMano.position.y+10, -90, //arriba derecha
-                        -90, cylinderMano.position.y+10, -90+4, //arriba izquierda
-                        -90, cylinderMano.position.y-10, -90, //abajo derecha
-                        -90, cylinderMano.position.y-10, -90+4, //abajo izquierda
-                        -90+19, cylinderMano.position.y+10, -90, //arriba fuera derecha
-                        -90+19, cylinderMano.position.y+10, -90+4, //arriba fuera izquierda
-                        -90+19, cylinderMano.position.y-10, -90, //abajo fuera derecha
-                        -90+19, cylinderMano.position.y-10, -90+4 //abajo fuera izquierda
-    ];
+    var pinza2 = new THREE.Geometry();
+    
+    
+    pinza.vertices.push(
+        new THREE.Vector3(-72, cylinderMano.position.y-10+5, -90+26+4),  // 0
+        new THREE.Vector3(-72+19, cylinderMano.position.y-10+5, -90+26+4),  // 1
+        new THREE.Vector3(-72, cylinderMano.position.y+10+5, -90+26+4),  // 2
+        new THREE.Vector3(-72+19, cylinderMano.position.y+10+5, -90+26+4),  // 3
+        new THREE.Vector3(-72, cylinderMano.position.y-10+5, -90+26),  // 4
+        new THREE.Vector3(-72+19, cylinderMano.position.y-10+5, -90+26),  // 5
+        new THREE.Vector3(-72, cylinderMano.position.y+10+5, -90+26),  // 6
+        new THREE.Vector3(-72+19, cylinderMano.position.y+10+5, -90+26),  // 7
+        //
+        new THREE.Vector3(-72+19, cylinderMano.position.y-10+5, -90+26+2),  // 0
+        new THREE.Vector3(-72+38, cylinderMano.position.y-5+5, -90+26+2),  // 1
+        new THREE.Vector3(-72+19, cylinderMano.position.y+10+5, -90+26+2),  // 2
+        new THREE.Vector3(-72+38, cylinderMano.position.y+5+5, -90+26+2),  // 3
+        new THREE.Vector3(-72+18, cylinderMano.position.y-10+5, -90+26),  // 4
+        new THREE.Vector3(-72+38, cylinderMano.position.y-5+5, -90+26),  // 5
+        new THREE.Vector3(-72+19, cylinderMano.position.y+10+5, -90+26),  // 6
+        new THREE.Vector3(-72+38, cylinderMano.position.y+5+5, -90+26),  // 7
+    );
 
-    var colores = [
-                    0x000000,
-                    0x000000,
-                    0x000000,
-                    0x000000,
-                    0x000000,
-                    0x000000,
-                    0x000000,
-                    0x000000
-    ];
+    pinza.faces.push(
+    // front
+    new THREE.Face3(0, 3, 2),
+    new THREE.Face3(0, 1, 3),
+    // right
+    new THREE.Face3(1, 7, 3),
+    new THREE.Face3(1, 5, 7),
+    // back
+    new THREE.Face3(5, 6, 7),
+    new THREE.Face3(5, 4, 6),
+    // left
+    new THREE.Face3(4, 2, 6),
+    new THREE.Face3(4, 0, 2),
+    // top
+    new THREE.Face3(2, 7, 6),
+    new THREE.Face3(2, 3, 7),
+    // bottom
+    new THREE.Face3(4, 1, 0),
+    new THREE.Face3(4, 5, 1),
 
-    var indices = [
-                        0,1,2, 7,3,4, 0,1,2,
-                        0,2,3, 4,3,2, 4,2,5,
-                        6,7,4, 6,4,5, 1,5,2,
-                        1,6,5, 7,6,1, 7,1,0
-    ];
+    //
+    new THREE.Face3(0+8, 3+8, 2+8),
+    new THREE.Face3(0+8, 1+8, 3+8),
+    // right
+    new THREE.Face3(1+8, 7+8, 3+8),
+    new THREE.Face3(1+8, 5+8, 7+8),
+    // back
+    new THREE.Face3(5+8, 6+8, 7+8),
+    new THREE.Face3(5+8, 4+8, 6+8),
+    new THREE.Face3(4+8, 2+8, 6+8),
+    new THREE.Face3(4+8, 0+8, 2+8),
+    new THREE.Face3(2+8, 7+8, 6+8),
+    new THREE.Face3(2+8, 3+8, 7+8),
+    new THREE.Face3(4+8, 1+8, 0+8),
+    new THREE.Face3(4+8, 5+8, 1+8),
+);
 
+    
+pinza2.vertices.push(
+    new THREE.Vector3(-72, cylinderMano.position.y-10+5, -105+26+4),  // 0
+    new THREE.Vector3(-72+19, cylinderMano.position.y-10+5, -105+26+4),  // 1
+    new THREE.Vector3(-72, cylinderMano.position.y+10+5, -105+26+4),  // 2
+    new THREE.Vector3(-72+19, cylinderMano.position.y+10+5, -105+26+4),  // 3
+    new THREE.Vector3(-72, cylinderMano.position.y-10+5, -105+26),  // 4
+    new THREE.Vector3(-72+19, cylinderMano.position.y-10+5, -105+26),  // 5
+    new THREE.Vector3(-72, cylinderMano.position.y+10+5, -105+26),  // 6
+    new THREE.Vector3(-72+19, cylinderMano.position.y+10+5, -105+26),  // 7
+    //
+    new THREE.Vector3(-72+19, cylinderMano.position.y-10+5, -105+26+2),  // 0
+    new THREE.Vector3(-72+38, cylinderMano.position.y-5+5, -105+26+2),  // 1
+    new THREE.Vector3(-72+19, cylinderMano.position.y+10+5, -105+26+2),  // 2
+    new THREE.Vector3(-72+38, cylinderMano.position.y+5+5, -105+26+2),  // 3
+    new THREE.Vector3(-72+18, cylinderMano.position.y-10+5, -105+26),  // 4
+    new THREE.Vector3(-72+38, cylinderMano.position.y-5+5, -105+26),  // 5
+    new THREE.Vector3(-72+19, cylinderMano.position.y+10+5, -105+26),  // 6
+    new THREE.Vector3(-72+38, cylinderMano.position.y+5+5, -105+26),  // 7
+);
 
-    for(var i =0; i < vertices.length; i+=3)
-    {
-        var vertice = new THREE.Vector3(vertices[i],vertices[i+1], vertices[i+2]);
-        pinza.vertices.push(vertice);
-    }
+pinza2.faces.push(
+// front
+new THREE.Face3(0, 3, 2),
+new THREE.Face3(0, 1, 3),
+// right
+new THREE.Face3(1, 7, 3),
+new THREE.Face3(1, 5, 7),
+// back
+new THREE.Face3(5, 6, 7),
+new THREE.Face3(5, 4, 6),
+// left
+new THREE.Face3(4, 2, 6),
+new THREE.Face3(4, 0, 2),
+// top
+new THREE.Face3(2, 7, 6),
+new THREE.Face3(2, 3, 7),
+// bottom
+new THREE.Face3(4, 1, 0),
+new THREE.Face3(4, 5, 1),
 
-    for(var i = 0; i < indices.length; i+=3)
-    {
-        var triangulo = new THREE.Face3(indices[i], indices[i+1], indices[i+2]);
+//
+new THREE.Face3(0+8, 3+8, 2+8),
+new THREE.Face3(0+8, 1+8, 3+8),
+// right
+new THREE.Face3(1+8, 7+8, 3+8),
+new THREE.Face3(1+8, 5+8, 7+8),
+// back
+new THREE.Face3(5+8, 6+8, 7+8),
+new THREE.Face3(5+8, 4+8, 6+8),
+new THREE.Face3(4+8, 2+8, 6+8),
+new THREE.Face3(4+8, 0+8, 2+8),
+new THREE.Face3(2+8, 7+8, 6+8),
+new THREE.Face3(2+8, 3+8, 7+8),
+new THREE.Face3(4+8, 1+8, 0+8),
+new THREE.Face3(4+8, 5+8, 1+8),
+);
 
-        for(var j = 0; j < 3; j++)
-        {
-            var color = new THREE.Color(colores[indices[i+j]]);
-            triangulo.vertexColors.push(color);
-        }
-
-        pinza.faces.push(triangulo);
-    }
-
-
+    pinza.computeFaceNormals();
+    pinza2.computeFaceNormals();
     var pinzaFinal = new THREE.Mesh(pinza, material);
+    var pinzaFinal2 = new THREE.Mesh(pinza2, material);
     mano.add(pinzaFinal);
+    mano.add(pinzaFinal2);
     antebrazo.add(mano);
     brazo.add(antebrazo);
     base.add(brazo);
