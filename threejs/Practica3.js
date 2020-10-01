@@ -10,11 +10,41 @@ var renderer, scene, camera;
 //Variables globales
 var robot, angulo = 0;
 var cameraController;
+var planta;
+var r = t = 100;
+var l = b = -r; 
 
 //Acciones
 init();
 loadScene();
 render();
+
+function setCameras(ar)
+{
+    //Construir las cuatro camaras
+    var origen = new THREE.Vector3(-100,0,-100);
+
+    //Ortográficas
+    var camOrtografica;
+    if(ar > 1)
+        camOrtografica = new THREE.OrthographicCamera(l*ar,r*ar,t,b,-500,500);
+    else
+        camOrtografica = new THREE.OrthographicCamera(l,r,t/ar,b/ar,-500,500);
+
+    planta = camOrtografica.clone();
+    planta.position.set(-100,400,-100);
+    planta.lookAt(origen);
+    planta.up = new THREE.Vector3(0,0,-1);
+
+    //Perspectiva
+    camera = new THREE.PerspectiveCamera(50, ar, 0.1, 10000);
+    camera.position.set(400,300,400);
+    //camera.lookAt(new THREE.Vector3(0,0,0));
+
+    
+    scene.add(planta);
+    scene.add(camera);
+}
 
 function init()
 {
@@ -24,7 +54,7 @@ function init()
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(new THREE.Color(0xFFFFFF));
-
+    renderer.autoClear = false;
     document.getElementById("container").appendChild(renderer.domElement);
 
     //Escena
@@ -32,16 +62,47 @@ function init()
 
     //Camara
     var ar = window.innerWidth/window.innerHeight;
-    camera = new THREE.PerspectiveCamera(50, ar, 0.1, 10000);
-    scene.add(camera);
-    camera.position.set(300,100,300);
     
-    camera.lookAt(new THREE.Vector3(0,150,0));
+    setCameras(ar);
 
     cameraController = new THREE.OrbitControls(camera, renderer.domElement);
-    cameraController.target.set(0,0,0);
+    cameraController.target.set(-100,0,-100);
     cameraController.noKeys = true;
-    console.log(camera.position);
+    
+
+    window.addEventListener('resize', updateAspect);
+}
+
+function updateAspect()
+{
+    //Indicarle al motor las nuevas dimensiones del canvas
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    var ar = window.innerWidth/window.innerHeight;
+
+    if(ar > 1)
+    {
+        planta.left = l*ar;
+        planta.right = r*ar;
+        planta.top = t;
+        planta.bottom = b;
+    }
+    
+    else
+    {
+        planta.left = l;
+        planta.right = r;
+        planta.top = t/ar;
+        planta.bottom = b/ar;
+    }
+
+    camera.aspect = ar;
+
+    //Se ha variado el volumen de la vista
+    
+    camera.updateProjectionMatrix();
+    planta.updateProjectionMatrix();
+
 }
 
 function loadScene()
@@ -310,6 +371,18 @@ function render()
 
     update();
 
+    renderer.clear();
+
+    if(window.innerWidth < window.innerHeight)
+        renderer.setViewport(0,0,window.innerWidth/4, window.innerWidth/4);
+    else
+        renderer.setViewport(0,0,window.innerHeight/4, window.innerHeight/4);
+    renderer.render(scene, planta);
+
+    renderer.setViewport(0,0,window.innerWidth, window.innerHeight);
     renderer.render(scene, camera);
+
+
+
     
 }
