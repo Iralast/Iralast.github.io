@@ -161,23 +161,23 @@ function loadScene()
     
     
     pinza.vertices.push(
-        new THREE.Vector3(-100, cylinderMano.position.y-10, -106+26+4),  // 0
-        new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106+26+4),  // 1
-        new THREE.Vector3(-100, cylinderMano.position.y+10, -106+26+4),  // 2
-        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+26+4),  // 3
-        new THREE.Vector3(-100, cylinderMano.position.y-10, -106+26),  // 4
-        new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106+26),  // 5
-        new THREE.Vector3(-100, cylinderMano.position.y+10, -106+26),  // 6
-        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+26),  // 7
+        new THREE.Vector3(-100, cylinderMano.position.y-10, -106+22+4),  // 0
+        new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106+22+4),  // 1
+        new THREE.Vector3(-100, cylinderMano.position.y+10, -106+22+4),  // 2
+        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+22+4),  // 3
+        new THREE.Vector3(-100, cylinderMano.position.y-10, -106+22),  // 4
+        new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106+22),  // 5
+        new THREE.Vector3(-100, cylinderMano.position.y+10, -106+22),  // 6
+        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+22),  // 7
         //
-        new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106+26+4),  // 0
-        new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106+26+2),  // 1
-        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+26+4),  // 2
-        new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106+26+2),  // 3
-        new THREE.Vector3(-100+18, cylinderMano.position.y-10, -106+26),  // 4
-        new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106+26),  // 5
-        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+26),  // 6
-        new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106+26),  // 7
+        new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106+22+4),  // 0
+        new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106+22+2),  // 1
+        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+22+4),  // 2
+        new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106+22+2),  // 3
+        new THREE.Vector3(-100+18, cylinderMano.position.y-10, -106+22),  // 4
+        new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106+22),  // 5
+        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+22),  // 6
+        new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106+22),  // 7
     );
 
     pinza.faces.push(
@@ -219,23 +219,23 @@ function loadScene()
 
     
 pinza2.vertices.push(
-    new THREE.Vector3(-100, cylinderMano.position.y-10, -106-18+4),  // 0
-    new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106-18+4),  // 1
-    new THREE.Vector3(-100, cylinderMano.position.y+10, -106-18+4),  // 2
-    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-18+4),  // 3
-    new THREE.Vector3(-100, cylinderMano.position.y-10, -106-18),  // 4
-    new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106-18),  // 5
-    new THREE.Vector3(-100, cylinderMano.position.y+10, -106-18),  // 6
-    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-18),  // 7
+    new THREE.Vector3(-100, cylinderMano.position.y-10, -106-14+4),  // 0
+    new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106-14+4),  // 1
+    new THREE.Vector3(-100, cylinderMano.position.y+10, -106-14+4),  // 2
+    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-14+4),  // 3
+    new THREE.Vector3(-100, cylinderMano.position.y-10, -106-14),  // 4
+    new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106-14),  // 5
+    new THREE.Vector3(-100, cylinderMano.position.y+10, -106-14),  // 6
+    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-14),  // 7
     //
-    new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106-18+4),  // 0
-    new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106-18+2),  // 1
-    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-18+4),  // 2
-    new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106-18+2),  // 3
-    new THREE.Vector3(-100+18, cylinderMano.position.y-10, -106-18),  // 4
-    new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106-18),  // 5
-    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-18),  // 6
-    new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106-18),  // 7
+    new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106-14+4),  // 0
+    new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106-14+2),  // 1
+    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-14+4),  // 2
+    new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106-14+2),  // 3
+    new THREE.Vector3(-100+18, cylinderMano.position.y-10, -106-14),  // 4
+    new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106-14),  // 5
+    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-14),  // 6
+    new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106-14),  // 7
 );
 
 
