@@ -60,11 +60,16 @@ function loadScene()
 
     //Modelo importado
     var loader = new THREE.ObjectLoader();
-    loader.load('models/soldado/soldado.json', 
+    loader.load('models/fox/fox.json', 
                 function(obj){
                     obj.position.y = 1;
+                    obj.scale.set(0.02,0.02,0.02)
+                   
+                    
                     cubo.add(obj);
                 });
+
+                
 
     //Construir escena
     esferacubo.add(cubo);

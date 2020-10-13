@@ -8,7 +8,8 @@
 var renderer, scene, camera;
 
 //Variables globales
-var robot, angulo = 0;
+var robot;
+var base, antebrazo, brazo, pinzaFinal, pinzaFinal2, mano,eje,esparrago;
 var cameraController;
 var planta;
 var r = t = 85;
@@ -17,6 +18,7 @@ var l = b = -r;
 //Acciones
 init();
 loadScene();
+setupGUI();
 render();
 
 function setCameras(ar)
@@ -108,8 +110,6 @@ function updateAspect()
 function loadScene()
 {
     //Cargar la escena con objetos
-
-   //Cargar la escena con objetos
 
     //Materiales
     var material = new THREE.MeshBasicMaterial({color: 'red', wireframe:true});
@@ -363,16 +363,95 @@ new THREE.Face3(4+8, 5+8, 1+8),
     robot.add(base)
     
     scene.add(robot)
+    
+    document.addEventListener("keydown", onDocumentKeyDown, false);
+    
 
-    //scene.add( new THREE.AxesHelper(500));
+    scene.add( new THREE.AxesHelper(500));
+    
 
+   
+    
+}
+
+function onDocumentKeyDown(event)
+{
+    var keyCode = event.which;
+
+    
+    if (keyCode == 37) {
+        robot.position.z -= 10;
+        planta.position.z -= 10;
+    }
+    if (keyCode == 39) {
+        robot.position.z += 10;
+        planta.position.z += 10;
+    }
+    if (keyCode == 38) {
+        robot.position.x += 10;
+        planta.position.x += 10;
+    }
+    if (keyCode == 40) {
+        robot.position.x -= 10;
+        planta.position.x -= 10;
+    }
     
 }
 
 function update()
 {
     
+    base.rotation.y = effectControl.giroBase * Math.PI / 180;
+    
+    brazo.rotation.z = effectControl.giroBrazo * Math.PI / 180;
+    
+    antebrazo.rotation.z = effectControl.giroAntebrazoY * Math.PI / 180;
+    antebrazo.rotation.y = effectControl.giroAntebrazoZ * Math.PI / 180;
+    mano.rotation.z = effectControl.giroPinzaZ * Math.PI / 180;
+    pinzaFinal2.position.z = effectControl.aperturaPinza / 2;
+    pinzaFinal.position.z = -effectControl.aperturaPinza / 2;
+
+    
+    
 }
+
+function setupGUI() {
+
+    //Interfaz de usuario
+    effectControl = {
+        giroBase: 0,
+        giroBrazo: 0,
+        giroAntebrazoZ: 0,
+        giroAntebrazoY: 0,
+        giroPinzaZ: 0,
+        aperturaPinza: 0,
+        reiniciar: function () {
+            location.reload();
+        },
+        color: "rgb(255,0,0)"
+    }
+    var gui = new dat.GUI();
+    var sub = gui.addFolder("Controles Robot")
+    sub.add(effectControl, "giroBase", -180, 180, 1).name("Giro Base");
+    sub.add(effectControl, "giroBrazo", -45, 45, 1).name("Giro Brazo");
+    sub.add(effectControl, "giroAntebrazoY", -180, 180, 1).name("Giro Antebrazo Y");
+    sub.add(effectControl, "giroAntebrazoZ", -90, 90, 1).name("Giro Antebrazo Z");
+    sub.add(effectControl, "giroPinzaZ", -40, 220, 1).name("Giro Pinza");
+    sub.add(effectControl, "aperturaPinza", 0, 15, 1).name("Cierre pinza");
+
+    sub.add(effectControl, "reiniciar")
+    var sensorColor = sub.addColor(effectControl, "color").name("Color")
+    sensorColor.onChange(function (color) {
+        robot.traverse(function (hijo) {
+            if (hijo instanceof THREE.Mesh) {
+                hijo.material.color = new THREE.Color(color)
+            }
+        })
+    })
+
+
+}
+
 
 function render()
 {

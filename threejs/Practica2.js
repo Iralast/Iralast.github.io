@@ -61,123 +61,125 @@ function loadScene()
     cylinder.position.z = -100;
     cylinder.position.y = 15/2;
     
-    
-    var base = new THREE.Object3D();
-    base.add(cylinder);
+   
+   /* base = new THREE.Object3D();
+    base.add(cylinder);*/
     //base.add( new THREE.AxisHelper(200));
+    base = new THREE.Mesh( geometry, material );
+    base.position.x = -100;
+    base.position.z = -100;
+    base.position.y = 15/2;
 
+  
     //Brazo
-    var brazo = new THREE.Object3D();
-    
+    brazo = new THREE.Object3D();
+   /* brazo.position.z = 100;
+    brazo.position.x = 100;
+    brazo.position.y = -8;*/
     
     var geometry = new THREE.CylinderGeometry( 18, 18, 20, 32 );
-    var eje = new THREE.Mesh( geometry, material );
     
-    eje.position.x = -100;
-    eje.position.z = -100;
-    eje.position.y = 18;
+    eje = new THREE.Mesh( geometry, material );
+    //eje.position.set(-100,18,-100);
+ 
     eje.rotation.x = 90*Math.PI/180;
     
-    
     brazo.add( eje );
-    
-
    
     var geometry = new THREE.BoxGeometry(18,120,10);
-    var esparrago = new THREE.Mesh(geometry, material);
-    esparrago.position.x = -100;
-    esparrago.position.z = -100;
+    esparrago = new THREE.Mesh(geometry, material);
+   /* esparrago.position.x = -100;
+    esparrago.position.z = -100;*/
     esparrago.position.y = eje.position.y+60;
     
     brazo.add(esparrago);
 
     var geometry = new THREE.SphereGeometry (20,0,32);
     var rotula = new THREE.Mesh(geometry, material);
-    rotula.position.x = -100;
-    rotula.position.z = -100;
+    /*rotula.position.x = -100;
+    rotula.position.z = -100;*/
     rotula.position.y = esparrago.position.y+60;
     
-
     brazo.add(rotula);
     
     //Antebrazo
-    var antebrazo = new THREE.Object3D();
+    antebrazo = new THREE.Object3D();
 
     var geometry = new THREE.CylinderGeometry( 22, 22, 6, 10 );
     var disco = new THREE.Mesh( geometry, material );
     
-    disco.position.x = -100;
-    disco.position.z = -100;
-    disco.position.y = rotula.position.y;
+    /*disco.position.x = -100;
+    disco.position.z = -100;*/
+    //disco.position.y = rotula.position.y;
     
     antebrazo.add(disco);
 
     var geometry = new THREE.BoxGeometry(4,80,0);
     var nervio1 = new THREE.Mesh(geometry, material);
-    nervio1.position.x = -90;
-    nervio1.position.z = -110;
+    nervio1.position.x = 12;
+    nervio1.position.z = -8;
     nervio1.position.y = disco.position.y+3+40;
     
     antebrazo.add(nervio1);
 
     var geometry = new THREE.BoxGeometry(4,80,0);
     var nervio2 = new THREE.Mesh(geometry, material);
-    nervio2.position.x = -90;
-    nervio2.position.z = -90;
+    nervio2.position.x = -12;
+    nervio2.position.z = -8;
     nervio2.position.y = disco.position.y+3+40;
     
     antebrazo.add(nervio2);
 
     var geometry = new THREE.BoxGeometry(4,80,0);
     var nervio3 = new THREE.Mesh(geometry, material);
-    nervio3.position.x = -110;
-    nervio3.position.z = -110;
+    nervio3.position.x = 12;
+    nervio3.position.z = 8;
     nervio3.position.y = disco.position.y+3+40;
     
     antebrazo.add(nervio3);
 
     var geometry = new THREE.BoxGeometry(4,80,0);
     var nervio4 = new THREE.Mesh(geometry, material);
-    nervio4.position.x = -110;
-    nervio4.position.z = -90;
+    nervio4.position.x = -12;
+    nervio4.position.z = 8;
     nervio4.position.y = disco.position.y+3+40;
     
     antebrazo.add(nervio4);
-
+    antebrazo.position.set(0,120,0);
     //Mano
-    var mano =  new THREE.Object3D();
+    mano =  new THREE.Object3D();
     var geometry = new THREE.CylinderGeometry( 15, 15, 40, 32 );
     var cylinderMano = new THREE.Mesh( geometry, material );
     
-    cylinderMano.position.x = -100;
-    cylinderMano.position.z = -100;
-    cylinderMano.position.y = disco.position.y+3+80;
+    /*cylinderMano.position.x = -100;
+    cylinderMano.position.z = -100;*/
+    //cylinderMano.position.y = disco.position.y+3+80;
     cylinderMano.rotation.x = 90*Math.PI/180;
 
     mano.add(cylinderMano);
-
+    mano.position.y = disco.position.y+3+80;
     var pinza = new THREE.Geometry();
     var pinza2 = new THREE.Geometry();
     
     
     pinza.vertices.push(
-        new THREE.Vector3(-100, cylinderMano.position.y-10, -106+22+4),  // 0
-        new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106+22+4),  // 1
-        new THREE.Vector3(-100, cylinderMano.position.y+10, -106+22+4),  // 2
-        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+22+4),  // 3
-        new THREE.Vector3(-100, cylinderMano.position.y-10, -106+22),  // 4
-        new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106+22),  // 5
-        new THREE.Vector3(-100, cylinderMano.position.y+10, -106+22),  // 6
-        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+22),  // 7
+        new THREE.Vector3(0, cylinderMano.position.y-10, 16+4),  // 0
+        new THREE.Vector3(19, cylinderMano.position.y-10, 16+4),  // 1
+        new THREE.Vector3(0, cylinderMano.position.y+10, 16+4),  // 2
+        new THREE.Vector3(19, cylinderMano.position.y+10, 16+4),  // 3
+        new THREE.Vector3(0, cylinderMano.position.y-10, 16),  // 4
+        new THREE.Vector3(19, cylinderMano.position.y-10, 16),  // 5
+        new THREE.Vector3(0, cylinderMano.position.y+10, 16),  // 6
+        new THREE.Vector3(19, cylinderMano.position.y+10, 16),  // 7
         //
-        new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106+22+4),  // 0
-        new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106+22+2),  // 1
-        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+22+4),  // 2
-        new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106+22+2),  // 3
-        new THREE.Vector3(-100+18, cylinderMano.position.y-10, -106+22),  // 4
-        new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106+22),  // 5
-        new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106+22),  // 6
-        new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106+22),  // 7
+        new THREE.Vector3(19, cylinderMano.position.y-10, 16+4),  // 0
+        new THREE.Vector3(38, cylinderMano.position.y-5, 16+2),  // 1
+        new THREE.Vector3(19, cylinderMano.position.y+10, 16+4),  // 2
+        new THREE.Vector3(38, cylinderMano.position.y+5, 16+2),  // 3
+        new THREE.Vector3(19, cylinderMano.position.y-10, 16),  // 4
+        new THREE.Vector3(38, cylinderMano.position.y-5, 16),  // 5
+        new THREE.Vector3(19, cylinderMano.position.y+10, 16),  // 6
+        new THREE.Vector3(38, cylinderMano.position.y+5, 16),  // 7
     );
 
     pinza.faces.push(
@@ -219,25 +221,24 @@ function loadScene()
 
     
 pinza2.vertices.push(
-    new THREE.Vector3(-100, cylinderMano.position.y-10, -106-14+4),  // 0
-    new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106-14+4),  // 1
-    new THREE.Vector3(-100, cylinderMano.position.y+10, -106-14+4),  // 2
-    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-14+4),  // 3
-    new THREE.Vector3(-100, cylinderMano.position.y-10, -106-14),  // 4
-    new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106-14),  // 5
-    new THREE.Vector3(-100, cylinderMano.position.y+10, -106-14),  // 6
-    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-14),  // 7
+    new THREE.Vector3(0, cylinderMano.position.y-10, -20+4),  // 0
+    new THREE.Vector3(19, cylinderMano.position.y-10, -20+4),  // 1
+    new THREE.Vector3(0, cylinderMano.position.y+10, -20+4),  // 2
+    new THREE.Vector3(19, cylinderMano.position.y+10, -20+4),  // 3
+    new THREE.Vector3(0, cylinderMano.position.y-10, -20),  // 4
+    new THREE.Vector3(19, cylinderMano.position.y-10, -20),  // 5
+    new THREE.Vector3(0, cylinderMano.position.y+10, -20),  // 6
+    new THREE.Vector3(19, cylinderMano.position.y+10, -20),  // 7
     //
-    new THREE.Vector3(-100+19, cylinderMano.position.y-10, -106-14+4),  // 0
-    new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106-14+2),  // 1
-    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-14+4),  // 2
-    new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106-14+2),  // 3
-    new THREE.Vector3(-100+18, cylinderMano.position.y-10, -106-14),  // 4
-    new THREE.Vector3(-100+38, cylinderMano.position.y-5, -106-14),  // 5
-    new THREE.Vector3(-100+19, cylinderMano.position.y+10, -106-14),  // 6
-    new THREE.Vector3(-100+38, cylinderMano.position.y+5, -106-14),  // 7
+    new THREE.Vector3(19, cylinderMano.position.y-10, -20+4),  // 0
+    new THREE.Vector3(38, cylinderMano.position.y-5, -20+2),  // 1
+    new THREE.Vector3(19, cylinderMano.position.y+10, -20+4),  // 2
+    new THREE.Vector3(38, cylinderMano.position.y+5, -20+2),  // 3
+    new THREE.Vector3(18, cylinderMano.position.y-10, -20),  // 4
+    new THREE.Vector3(38, cylinderMano.position.y-5, -20),  // 5
+    new THREE.Vector3(19, cylinderMano.position.y+10, -20),  // 6
+    new THREE.Vector3(38, cylinderMano.position.y+5, -20),  // 7
 );
-
 
 pinza2.faces.push(
 // front
@@ -278,15 +279,21 @@ new THREE.Face3(4+8, 5+8, 1+8),
 
     pinza.computeFaceNormals();
     pinza2.computeFaceNormals();
-    var pinzaFinal = new THREE.Mesh(pinza, material);
-    var pinzaFinal2 = new THREE.Mesh(pinza2, material);
-    mano.add(pinzaFinal);
-    mano.add(pinzaFinal2);
-    antebrazo.add(mano);
-    brazo.add(antebrazo);
-    base.add(brazo);
-    robot.add(base);
-    scene.add( robot);
+
+    
+    pinzaFinal = new THREE.Mesh(pinza, material);
+    pinzaFinal2 = new THREE.Mesh(pinza2, material);
+   
+    
+    mano.add(pinzaFinal)
+    mano.add(pinzaFinal2)
+    
+    antebrazo.add(mano)
+    brazo.add(antebrazo)
+    base.add(brazo)
+    robot.add(base)
+    
+    scene.add(robot)
 
     //scene.add( new THREE.AxesHelper(500));
 
