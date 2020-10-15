@@ -1,8 +1,9 @@
-var sphereShape, sphereBody, world, physicsMaterial, walls=[], balls=[], ballMeshes=[], boxes=[], boxMeshes=[];
-
+var sphereShape, sphereBody, world;
 var camera, scene, renderer;
-var geometry, material, mesh;
+var planes = [], planesBody = [];
 var controls,time = Date.now();
+var reloj = new THREE.Clock();
+
 var aux;
 var blocker = document.getElementById( 'blocker' );
 var instructions = document.getElementById( 'instructions' );
@@ -87,35 +88,24 @@ if ( havePointerLock ) {
 
             }
 
-initCannon();
-init();
+initPhysics();
+initVisual();
 loadScene();
 startAnimation();
 render();
 
-function initCannon(){
+function initPhysics(){
     
     world = new CANNON.World(); 
    	world.gravity.set(0,-40,0); 
    	
    	world.solver.iterations = 10; 
 
-    // Create a slippery material (friction coefficient = 0.0)
-    physicsMaterial = new CANNON.Material("slipperyMaterial");
-    var physicsContactMaterial = new CANNON.ContactMaterial(physicsMaterial,
-                                                                        physicsMaterial,
-                                                                        0.0, // friction coefficient
-                                                                        0.3  // restitution
-                                                                        );
-    // We must add the contact materials to the world
-    world.addContactMaterial(physicsContactMaterial);
-
-    // Create a sphere
     var mass = 5, radius = 1.3;
     sphereShape = new CANNON.Sphere(radius);
     sphereBody = new CANNON.Body({ mass: mass });
     sphereBody.addShape(sphereShape);
-    sphereBody.position.set(0,5,0);
+    sphereBody.position.set(40,5,-600);
                 
     sphereBody.linearDamping = 0.9;
     world.add(sphereBody);
@@ -123,7 +113,7 @@ function initCannon(){
                 
 }
 
-function init() {
+function initVisual() {
 
                 
 
@@ -148,7 +138,7 @@ function init() {
     document.body.appendChild( renderer.domElement );
 
     window.addEventListener( 'resize', updateAspectRatio, false );
-
+    reloj.start();
                 
 }
 
@@ -167,70 +157,67 @@ function loadScene()
 
     //Materiales
     var material = new THREE.MeshBasicMaterial({color: 'red', wireframe:true});
-    var foxMaterial = new CANNON.Material("foxMaterial")
-    var groundMaterial = new CANNON.Material("groundMaterial")
-    var foxToGround = new CANNON.ContactMaterial(foxMaterial,groundMaterial,
-        { friction: 0.0, 
-            restitution: 0.0 });
-    world.addContactMaterial(foxToGround);
     //Geometrías
-    var planeBox = new CANNON.Box(new CANNON.Vec3(50,50,1));
-    var planeBody = new CANNON.Body({mass: 0, material: groundMaterial});
-    planeBody.addShape(planeBox);
-    planeBody.position.copy(new CANNON.Vec3(0,0,0));
-    planeBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
-    world.add(planeBody);
+    
     var geometry = new THREE.BoxGeometry(100,100,5);                                                                                                                                                                                                                                                                                                                                                                                                                        
-    var plane = new THREE.Mesh( geometry, material );
+   
+    createPlane(new CANNON.Vec3(50,50,2.5),new CANNON.Vec3(0,0,0), geometry, material,true);
+   
+    createPlane(new CANNON.Vec3(50,50,2.5),new CANNON.Vec3(0,0,-150), geometry, material,true);
+
+    createPlane(new CANNON.Vec3(50,50,2.5),new CANNON.Vec3(0,0,-300), geometry, material,true); //2
+   
+
+    var geometry2 = new THREE.BoxGeometry(25,25,5);    
+
+    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(-40,0,-400), geometry2, material,true);
+    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(-3,0,-450), geometry2, material,true);
+    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(40,0,-500), geometry2, material,true);
+
+  
+
+    var geometry3 = new THREE.BoxGeometry(25,150,5);  
+
+    createPlane(new CANNON.Vec3(12.5,75,2.5),new CANNON.Vec3(40,0,-600), geometry3, material,true);
+
+    var geometry4 = new THREE.BoxGeometry(25,25,30);  
+    createPlane(new CANNON.Vec3(12.5,12.5,15),new CANNON.Vec3(67,15,-560), geometry4, material,false);  //7
+    createPlane(new CANNON.Vec3(12.5,12.5,15),new CANNON.Vec3(67,15,-590), geometry4, material,false);  //8
+    createPlane(new CANNON.Vec3(12.5,12.5,15),new CANNON.Vec3(67,15,-620), geometry4, material,false); //9
+ 
+     
+}
+
+function createPlane(tamCannon, position, geometry, material, horizontal)
+{   
+    var planeBox = new CANNON.Box(tamCannon);
+    plane =  new THREE.Mesh( geometry, material );
+
+    if(horizontal)
+        plane.rotation.x = 90*Math.PI/180;
+
+    planeBody = new CANNON.Body({mass: 0});
+    planeBody.addShape(planeBox);
+    planeBody.position.copy(position);
+
+    if(horizontal)
+        planeBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
     
     plane.position.copy(planeBody.position);
-    plane.rotation.x = 90*Math.PI/180;
-    
-    
 
+    planesBody.push(planeBody);
+    planes.push(plane);
+
+    world.add(planeBody);
     scene.add(plane);
-   
-    var foxMaterial = new CANNON.Material("foxMaterial")
-    
-
-   
-    var plane2 =  new THREE.Mesh( geometry, material );
-    plane2.rotation.x = 90*Math.PI/180;
-    var planeBody2 = new CANNON.Body({mass: 0, material: groundMaterial});
-    planeBody2.addShape(planeBox);
-    planeBody2.position.copy(new CANNON.Vec3(0,0,-150));
-    planeBody2.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
-    world.add(planeBody2);
-    plane2.position.copy(planeBody2.position);
-
-    scene.add(plane2);
-
-    plane3 =  new THREE.Mesh( geometry, material );
-    plane3.rotation.x = 90*Math.PI/180;
-    planeBody3 = new CANNON.Body({mass: 0, material: groundMaterial});
-    planeBody3.addShape(planeBox);
-    planeBody3.position.copy(new CANNON.Vec3(0,0,-300));
-    planeBody3.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
-    world.add(planeBody3);
-    plane3.position.copy(planeBody3.position);
-
-    
-    scene.add(plane3);
-    
-  
-   
-
-   // document.addEventListener("keydown", onDocumentKeyDown, false);
-    
-
-    scene.add( new THREE.AxesHelper(500));  
 }
+
 function startAnimation()
 {
-    var mvtoDer = new TWEEN.Tween( planeBody3.position ).to( {x: [100],
+    var mvtoDer = new TWEEN.Tween( planesBody[2].position ).to( {x: [100],
         y: [0],
         z: [-300] },6000 );
-    var mvtoIzq = new TWEEN.Tween( planeBody3.position ).to( {x: [-100],
+    var mvtoIzq = new TWEEN.Tween( planesBody[2].position ).to( {x: [-100],
         y: [0],
         z: [-300] }, 6000 );
   
@@ -240,21 +227,63 @@ function startAnimation()
     mvtoIzq.chain( mvtoDer );
     
     mvtoDer.start();
+    
+    var mvtoDer = new TWEEN.Tween( planesBody[7].position ).to( {x: [40],
+        y: [15],
+        z: [-560] },5000 );
+    var mvtoIzq = new TWEEN.Tween( planesBody[7].position ).to( {x: [67],
+        y: [15],
+        z: [-560] }, 5000 );
+
+    mvtoDer.chain( mvtoIzq );
+    mvtoIzq.chain( mvtoDer );
+        
+    mvtoDer.start();
+
+    var mvtoDer = new TWEEN.Tween( planesBody[8].position ).to( {x: [40],
+        y: [15],
+        z: [-590] },5500 );
+    var mvtoIzq = new TWEEN.Tween( planesBody[8].position ).to( {x: [67],
+        y: [15],
+        z: [-590] }, 5500 );
+
+    mvtoDer.chain( mvtoIzq );
+    mvtoIzq.chain( mvtoDer );
+        
+    mvtoDer.start();
+
+    var mvtoDer = new TWEEN.Tween( planesBody[9].position ).to( {x: [40],
+        y: [15],
+        z: [-620] },6000 );
+    var mvtoIzq = new TWEEN.Tween( planesBody[9].position ).to( {x: [67],
+        y: [15],
+        z: [-620] }, 6000 );
+
+    mvtoDer.chain( mvtoIzq );
+    mvtoIzq.chain( mvtoDer );
+        
+    mvtoDer.start();
+
 }         
 function update() {
-                
+    var delta = reloj.getDelta();    
     if(controls.enabled)
-        world.step(dt);
+        world.step(delta);
 
-    plane3.position.copy(planeBody3.position);
-    plane3.quaternion.copy(planeBody3.quaternion);
-    console.log(sphereBody.position);
+    planes[2].position.copy(planesBody[2].position);
+    planes[2].quaternion.copy(planesBody[2].quaternion);
+    planes[7].position.copy(planesBody[7].position);
+    planes[7].quaternion.copy(planesBody[7].quaternion);
+    planes[8].position.copy(planesBody[8].position);
+    planes[8].quaternion.copy(planesBody[8].quaternion);
+    planes[9].position.copy(planesBody[9].position);
+    planes[9].quaternion.copy(planesBody[9].quaternion);
+    
     if(sphereBody.position.y < -20)
     {
         sphereBody.position.set(0,5,0);
-     
-        
         camera.position.set( 0,10,0 );
+        //camera.lookAt( new THREE.Vector3( 0,5,-50 ) );
         
     }
                                     
@@ -262,6 +291,7 @@ function update() {
     TWEEN.update();
     stats.update();
     controls.update( Date.now() - time );
+   
     renderer.render( scene, camera );
     time = Date.now();
 
