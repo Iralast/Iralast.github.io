@@ -1,10 +1,12 @@
 var sphereShape, sphereBody, world;
 var camera, scene, renderer;
 var planes = [], planesBody = [];
+var spikes = [], spikesBody = [];
 var controls,time = Date.now();
 var reloj = new THREE.Clock();
-
-var aux;
+var spike;
+var cont = 1;
+var aux = 0;
 var blocker = document.getElementById( 'blocker' );
 var instructions = document.getElementById( 'instructions' );
 
@@ -105,7 +107,7 @@ function initPhysics(){
     sphereShape = new CANNON.Sphere(radius);
     sphereBody = new CANNON.Body({ mass: mass });
     sphereBody.addShape(sphereShape);
-    sphereBody.position.set(40,5,-600);
+    sphereBody.position.set(40,5,-700);
                 
     sphereBody.linearDamping = 0.9;
     world.add(sphereBody);
@@ -171,21 +173,142 @@ function loadScene()
     var geometry2 = new THREE.BoxGeometry(25,25,5);    
 
     createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(-40,0,-400), geometry2, material,true);
-    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(-3,0,-450), geometry2, material,true);
-    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(40,0,-500), geometry2, material,true);
+    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(-3,0,-460), geometry2, material,true);
+    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(40,0,-510), geometry2, material,true);
 
   
 
     var geometry3 = new THREE.BoxGeometry(25,150,5);  
 
-    createPlane(new CANNON.Vec3(12.5,75,2.5),new CANNON.Vec3(40,0,-600), geometry3, material,true);
+    createPlane(new CANNON.Vec3(12.5,75,2.5),new CANNON.Vec3(40,0,-630), geometry3, material,true);
 
     var geometry4 = new THREE.BoxGeometry(25,25,30);  
-    createPlane(new CANNON.Vec3(12.5,12.5,15),new CANNON.Vec3(67,15,-560), geometry4, material,false);  //7
-    createPlane(new CANNON.Vec3(12.5,12.5,15),new CANNON.Vec3(67,15,-590), geometry4, material,false);  //8
-    createPlane(new CANNON.Vec3(12.5,12.5,15),new CANNON.Vec3(67,15,-620), geometry4, material,false); //9
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(65,15,-600), geometry4, material,false);  //7
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(65,15,-630), geometry4, material,false);  //8
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(65,15,-660), geometry4, material,false); //9
  
-     
+    createPlane(new CANNON.Vec3(12.5,75,2.5),new CANNON.Vec3(40,0,-820), geometry3, material,true);
+
+    var loader = new THREE.ObjectLoader();
+    loader.load('models/spikes-threejs/spikes.json', 
+                function(obj){
+                    obj.position.set(40,-15,-785);
+                    obj.scale.set(25,15,15)
+                   
+                    spikes.push(obj);
+                    scene.add(obj);
+                   
+    });
+    var planeBox2 = new CANNON.Box(new CANNON.Vec3(12.5,7.5,2.5));
+
+    planeBody2 = new CANNON.Body({mass: 0});
+    planeBody2.addShape(planeBox2);
+    planeBody2.position.copy(new CANNON.Vec3(40,-15,-785));
+
+ 
+    planeBody2.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
+
+    spikesBody.push(planeBody2);
+
+    
+    world.add(planeBody2);
+
+    
+   
+   var loader = new THREE.ObjectLoader();
+    loader.load('models/spikes-threejs/spikes.json', 
+                function(obj){
+                    obj.position.set(40,-15,-800);
+                    obj.scale.set(25,15,15)
+                   
+                    spikes.push(obj);
+                    scene.add(obj);
+    });
+    var planeBox2 = new CANNON.Box(new CANNON.Vec3(12.5,7.5,2.5));
+
+    planeBody2 = new CANNON.Body({mass: 0});
+    planeBody2.addShape(planeBox2);
+    planeBody2.position.copy(new CANNON.Vec3(40,-15,-800));
+
+ 
+    planeBody2.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
+
+    spikesBody.push(planeBody2);
+
+    
+    world.add(planeBody2);
+
+    var loader = new THREE.ObjectLoader();
+    loader.load('models/spikes-threejs/spikes.json', 
+                function(obj){
+                    obj.position.set(40,-15,-815);
+                    obj.scale.set(25,15,15)
+                   
+                    spikes.push(obj);
+                    scene.add(obj);
+    });
+
+    var planeBox2 = new CANNON.Box(new CANNON.Vec3(12.5,7.5,2.5));
+
+    planeBody2 = new CANNON.Body({mass: 0});
+    planeBody2.addShape(planeBox2);
+    planeBody2.position.copy(new CANNON.Vec3(40,-15,-815));
+
+ 
+    planeBody2.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
+
+    spikesBody.push(planeBody2);
+
+    
+    world.add(planeBody2);
+    var loader = new THREE.ObjectLoader();
+    loader.load('models/spikes-threejs/spikes.json', 
+                function(obj){
+                    obj.position.set(40,-15,-830);
+                    obj.scale.set(25,15,15)
+                   
+                    spikes.push(obj);
+                    scene.add(obj);
+    });
+    var planeBox2 = new CANNON.Box(new CANNON.Vec3(12.5,7.5,2.5));
+
+    planeBody2 = new CANNON.Body({mass: 0});
+    planeBody2.addShape(planeBox2);
+    planeBody2.position.copy(new CANNON.Vec3(40,-15,-830));
+
+ 
+    planeBody2.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
+
+    spikesBody.push(planeBody2);
+
+    
+    world.add(planeBody2);
+    var loader = new THREE.ObjectLoader();
+    loader.load('models/spikes-threejs/spikes.json', 
+                function(obj){
+                    obj.position.set(40,-15,-845);
+                    obj.scale.set(25,15,15)
+                   
+                    spikes.push(obj);
+                    scene.add(obj);
+    });
+    var planeBox2 = new CANNON.Box(new CANNON.Vec3(12.5,7.5,2.5));
+
+    planeBody2 = new CANNON.Body({mass: 0});
+    planeBody2.addShape(planeBox2);
+    planeBody2.position.copy(new CANNON.Vec3(40,-15,-845));
+
+ 
+    planeBody2.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
+
+    spikesBody.push(planeBody2);
+
+    
+    world.add(planeBody2);
+
+
+
+
 }
 
 function createPlane(tamCannon, position, geometry, material, horizontal)
@@ -214,26 +337,26 @@ function createPlane(tamCannon, position, geometry, material, horizontal)
 
 function startAnimation()
 {
-    var mvtoDer = new TWEEN.Tween( planesBody[2].position ).to( {x: [100],
+    mvtoDer1 = new TWEEN.Tween( planesBody[2].position ).to( {x: [100],
         y: [0],
-        z: [-300] },6000 );
-    var mvtoIzq = new TWEEN.Tween( planesBody[2].position ).to( {x: [-100],
+        z: [-300] },8000 );
+    mvtoIzq1 = new TWEEN.Tween( planesBody[2].position ).to( {x: [-100],
         y: [0],
-        z: [-300] }, 6000 );
+        z: [-300] }, 8000 );
   
     
   
-    mvtoDer.chain( mvtoIzq );
-    mvtoIzq.chain( mvtoDer );
+    mvtoDer1.chain( mvtoIzq1 );
+    mvtoIzq1.chain( mvtoDer1 );
     
-    mvtoDer.start();
+    mvtoDer1.start();
     
     var mvtoDer = new TWEEN.Tween( planesBody[7].position ).to( {x: [40],
         y: [15],
-        z: [-560] },5000 );
-    var mvtoIzq = new TWEEN.Tween( planesBody[7].position ).to( {x: [67],
+        z: [-600] },5000 );
+    var mvtoIzq = new TWEEN.Tween( planesBody[7].position ).to( {x: [65],
         y: [15],
-        z: [-560] }, 5000 );
+        z: [-600] }, 5000 );
 
     mvtoDer.chain( mvtoIzq );
     mvtoIzq.chain( mvtoDer );
@@ -242,10 +365,10 @@ function startAnimation()
 
     var mvtoDer = new TWEEN.Tween( planesBody[8].position ).to( {x: [40],
         y: [15],
-        z: [-590] },5500 );
-    var mvtoIzq = new TWEEN.Tween( planesBody[8].position ).to( {x: [67],
+        z: [-630] },5500 );
+    var mvtoIzq = new TWEEN.Tween( planesBody[8].position ).to( {x: [65],
         y: [15],
-        z: [-590] }, 5500 );
+        z: [-630] }, 5500 );
 
     mvtoDer.chain( mvtoIzq );
     mvtoIzq.chain( mvtoDer );
@@ -254,19 +377,57 @@ function startAnimation()
 
     var mvtoDer = new TWEEN.Tween( planesBody[9].position ).to( {x: [40],
         y: [15],
-        z: [-620] },6000 );
-    var mvtoIzq = new TWEEN.Tween( planesBody[9].position ).to( {x: [67],
+        z: [-660] },6000 );
+    var mvtoIzq = new TWEEN.Tween( planesBody[9].position ).to( {x: [65],
         y: [15],
-        z: [-620] }, 6000 );
+        z: [-660] }, 6000 );
 
     mvtoDer.chain( mvtoIzq );
     mvtoIzq.chain( mvtoDer );
         
     mvtoDer.start();
+    
 
-}         
+    for(var i = 0; i < 2; i++)
+    {
+        var mvtoArriba = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
+            y: [2],
+            z: [spikesBody[i].position.z] },2000 );
+        var mvtoAbajo = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
+            y: [-15],
+            z: [spikesBody[i].position.z] }, 5000 );
+    
+        mvtoArriba.chain( mvtoAbajo );
+        mvtoAbajo.chain( mvtoArriba );
+                
+        mvtoArriba.start();
+    }
+    
+    for(var i = 2; i < spikesBody.length; i++)
+    {
+        var mvtoArriba = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
+            y: [2],
+            z: [spikesBody[i].position.z] },2000 );
+        var mvtoAbajo = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
+            y: [-15],
+            z: [spikesBody[i].position.z] }, 5000 );
+    
+        mvtoArriba.chain( mvtoAbajo );
+        mvtoAbajo.chain( mvtoArriba );
+                
+        mvtoArriba.start();
+        mvtoArriba.delay(3000);
+    }
+    
+
+}        
+
+
+
+
 function update() {
-    var delta = reloj.getDelta();    
+    var delta = reloj.getDelta();
+    
     if(controls.enabled)
         world.step(delta);
 
@@ -279,12 +440,39 @@ function update() {
     planes[9].position.copy(planesBody[9].position);
     planes[9].quaternion.copy(planesBody[9].quaternion);
     
+   
+    for(var i = 0; i < spikes.length; i++)
+    {
+        spikes[i].position.copy(spikesBody[i].position);
+    }
+
+
     if(sphereBody.position.y < -20)
     {
         sphereBody.position.set(0,5,0);
         camera.position.set( 0,10,0 );
-        //camera.lookAt( new THREE.Vector3( 0,5,-50 ) );
         
+    }
+    
+    for(var i = 0; i < spikes.length; i++)
+    {
+        if(sphereBody.position.z < spikes[i].position.z+10 && sphereBody.position.z > spikes[i].position.z-10 && sphereBody.position.x > planes[10].position.x - 6.75 && sphereBody.position.x < planes[10].position.x + 6.75 && sphereBody.position.y <= 5 && spikes[i].position.y >= -10)
+        {
+            controls.enabled = false;
+            setTimeout(function(){  
+                sphereBody.position.set(0,5,0);
+                camera.position.set( 0,10,0 ); 
+                controls.enabled = true;}, 3000);
+            
+            
+        }
+    }
+
+    
+    
+    if(sphereBody.position.y <= 4 && sphereBody.position.z > planes[2].position.z-50 && sphereBody.position.z < planes[2].position.z+50)
+    {
+        //sphereBody.velocity = planesBody[2].velocity;
     }
                                     
                 
