@@ -364,9 +364,25 @@ new THREE.Face3(4+8, 5+8, 1+8),
     
     scene.add(robot)
     
-    document.addEventListener("keydown", onDocumentKeyDown, false);
     
-
+    
+    keyboard = new THREEx.KeyboardState(renderer.domElement);
+    renderer.domElement.setAttribute("tabIndex", "0");
+    renderer.domElement.focus();
+    keyboard.domElement.addEventListener('keydown', function (event) {
+        if (keyboard.eventMatches(event, 'left')) {
+            robot.position.z -= 10;
+        }
+        if (keyboard.eventMatches(event, 'right')) {
+            robot.position.z += 10;
+        }
+        if (keyboard.eventMatches(event, 'up')) {
+            robot.position.x += 10;
+        }
+        if (keyboard.eventMatches(event, 'down')) {
+            robot.position.x -= 10;
+        }
+    })
     scene.add( new THREE.AxesHelper(500));
     
 
@@ -374,29 +390,6 @@ new THREE.Face3(4+8, 5+8, 1+8),
     
 }
 
-function onDocumentKeyDown(event)
-{
-    var keyCode = event.which;
-
-    
-    if (keyCode == 37) {
-        robot.position.z -= 10;
-        planta.position.z -= 10;
-    }
-    if (keyCode == 39) {
-        robot.position.z += 10;
-        planta.position.z += 10;
-    }
-    if (keyCode == 38) {
-        robot.position.x += 10;
-        planta.position.x += 10;
-    }
-    if (keyCode == 40) {
-        robot.position.x -= 10;
-        planta.position.x -= 10;
-    }
-    
-}
 
 function update()
 {

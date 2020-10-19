@@ -9,7 +9,9 @@ var cont = 1;
 var aux = 0;
 var blocker = document.getElementById( 'blocker' );
 var instructions = document.getElementById( 'instructions' );
-
+var izq = false;
+var der = false;
+var det = del = false;
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
 if ( havePointerLock ) {
@@ -107,7 +109,7 @@ function initPhysics(){
     sphereShape = new CANNON.Sphere(radius);
     sphereBody = new CANNON.Body({ mass: mass });
     sphereBody.addShape(sphereShape);
-    sphereBody.position.set(40,5,-700);
+    sphereBody.position.set(40,5,-890);
                 
     sphereBody.linearDamping = 0.9;
     world.add(sphereBody);
@@ -193,8 +195,7 @@ function loadScene()
     loader.load('models/spikes-threejs/spikes.json', 
                 function(obj){
                     obj.position.set(40,-15,-785);
-                    obj.scale.set(25,15,15)
-                   
+                    obj.scale.set(25,15,15);
                     spikes.push(obj);
                     scene.add(obj);
                    
@@ -306,7 +307,13 @@ function loadScene()
     
     world.add(planeBody2);
 
+    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(40,0,-940), geometry2, material,true);//11
+    createPlane(new CANNON.Vec3(12.5,75,2.5),new CANNON.Vec3(40,0,-1090), geometry3, material,true);
 
+    var geometry4 = new THREE.BoxGeometry(25,25,30);  
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(15,15,-1060), geometry4, material,false);  //13
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(15,15,-1090), geometry4, material,false);  //14
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(15,15,-1120), geometry4, material,false); //15
 
 
 }
@@ -339,12 +346,24 @@ function startAnimation()
 {
     mvtoDer1 = new TWEEN.Tween( planesBody[2].position ).to( {x: [100],
         y: [0],
-        z: [-300] },8000 );
+        z: [-300] },10000);
     mvtoIzq1 = new TWEEN.Tween( planesBody[2].position ).to( {x: [-100],
         y: [0],
-        z: [-300] }, 8000 );
+        z: [-300] }, 10000);
   
-    
+    mvtoDer1.onComplete(function(){
+
+        der = true;
+        izq = false;
+
+    });
+
+    mvtoIzq1.onComplete(function(){
+
+        der = false;
+        izq = true;
+
+    });
   
     mvtoDer1.chain( mvtoIzq1 );
     mvtoIzq1.chain( mvtoDer1 );
@@ -392,14 +411,14 @@ function startAnimation()
     {
         var mvtoArriba = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
             y: [2],
-            z: [spikesBody[i].position.z] },2000 );
+            z: [spikesBody[i].position.z] },1000 );
         var mvtoAbajo = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
             y: [-15],
             z: [spikesBody[i].position.z] }, 5000 );
     
         mvtoArriba.chain( mvtoAbajo );
         mvtoAbajo.chain( mvtoArriba );
-                
+        mvtoArriba.delay(2000);
         mvtoArriba.start();
     }
     
@@ -407,7 +426,7 @@ function startAnimation()
     {
         var mvtoArriba = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
             y: [2],
-            z: [spikesBody[i].position.z] },2000 );
+            z: [spikesBody[i].position.z] },1000 );
         var mvtoAbajo = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
             y: [-15],
             z: [spikesBody[i].position.z] }, 5000 );
@@ -416,9 +435,70 @@ function startAnimation()
         mvtoAbajo.chain( mvtoArriba );
                 
         mvtoArriba.start();
-        mvtoArriba.delay(3000);
+        mvtoArriba.delay(4000);
     }
     
+    var mvtoDel = new TWEEN.Tween( planesBody[11].position ).to( {x: [40],
+        y: [0],
+        z: [-940] },8000 );
+    var mvtoDet = new TWEEN.Tween( planesBody[11].position ).to( {x: [40],
+        y: [0],
+        z: [-1000] }, 8000 );
+
+    mvtoDel.chain( mvtoDet );
+    mvtoDet.chain( mvtoDel );
+        
+    mvtoDel.start();
+
+    mvtoDel.onComplete(function(){
+
+        del = true;
+        det = false;
+
+    });
+
+    mvtoDet.onComplete(function(){
+
+        del = false;
+        det = true;
+
+    });
+
+    var mvtoDer = new TWEEN.Tween( planesBody[13].position ).to( {x: [15],
+        y: [15],
+        z: [-1060] },5000 );
+    var mvtoIzq = new TWEEN.Tween( planesBody[13].position ).to( {x: [65],
+        y: [15],
+        z: [-1060] }, 5000 );
+
+    mvtoDer.chain( mvtoIzq );
+    mvtoIzq.chain( mvtoDer );
+    mvtoIzq.delay(2000);
+    mvtoDer.start();
+
+    var mvtoDer = new TWEEN.Tween( planesBody[14].position ).to( {x: [15],
+        y: [15],
+        z: [-1090] },5500 );
+    var mvtoIzq = new TWEEN.Tween( planesBody[14].position ).to( {x: [65],
+        y: [15],
+        z: [-1090] }, 5500 );
+
+    mvtoDer.chain( mvtoIzq );
+    mvtoIzq.chain( mvtoDer );
+    mvtoIzq.delay(2000);
+    mvtoDer.start();
+
+    var mvtoDer = new TWEEN.Tween( planesBody[15].position ).to( {x: [15],
+        y: [15],
+        z: [-1120] },6000 );
+    var mvtoIzq = new TWEEN.Tween( planesBody[15].position ).to( {x: [65],
+        y: [15],
+        z: [-1120] }, 6000 );
+
+    mvtoDer.chain( mvtoIzq );
+    mvtoIzq.chain( mvtoDer );
+    mvtoIzq.delay(2000); 
+    mvtoDer.start();
 
 }        
 
@@ -431,7 +511,11 @@ function update() {
     if(controls.enabled)
         world.step(delta);
 
-    planes[2].position.copy(planesBody[2].position);
+    for(var i = 0; i < planes.length; i++)
+    {
+        planes[i].position.copy(planesBody[i].position);
+    }
+    /*planes[2].position.copy(planesBody[2].position);
     planes[2].quaternion.copy(planesBody[2].quaternion);
     planes[7].position.copy(planesBody[7].position);
     planes[7].quaternion.copy(planesBody[7].quaternion);
@@ -439,8 +523,14 @@ function update() {
     planes[8].quaternion.copy(planesBody[8].quaternion);
     planes[9].position.copy(planesBody[9].position);
     planes[9].quaternion.copy(planesBody[9].quaternion);
-    
-   
+    planes[11].position.copy(planesBody[11].position);
+    planes[11].quaternion.copy(planesBody[11].quaternion);
+    planes[13].position.copy(planesBody[13].position);
+    planes[13].quaternion.copy(planesBody[13].quaternion);
+    planes[14].position.copy(planesBody[14].position);
+    planes[14].quaternion.copy(planesBody[14].quaternion);
+    planes[15].position.copy(planesBody[15].position);
+    planes[15].quaternion.copy(planesBody[15].quaternion);*/
     for(var i = 0; i < spikes.length; i++)
     {
         spikes[i].position.copy(spikesBody[i].position);
@@ -451,19 +541,20 @@ function update() {
     {
         sphereBody.position.set(0,5,0);
         camera.position.set( 0,10,0 );
+        mvtoDer1.stop();
+        mvtoDer1.start();
         
     }
     
     for(var i = 0; i < spikes.length; i++)
     {
-        if(sphereBody.position.z < spikes[i].position.z+10 && sphereBody.position.z > spikes[i].position.z-10 && sphereBody.position.x > planes[10].position.x - 6.75 && sphereBody.position.x < planes[10].position.x + 6.75 && sphereBody.position.y <= 5 && spikes[i].position.y >= -10)
+        if(sphereBody.position.z < spikes[i].position.z+10 && sphereBody.position.z > spikes[i].position.z-10 && sphereBody.position.x > planes[10].position.x - 6.75 && sphereBody.position.x < planes[10].position.x + 6.75 && sphereBody.position.y <= 5 && spikes[i].position.y >= -8)
         {
             controls.enabled = false;
             setTimeout(function(){  
                 sphereBody.position.set(0,5,0);
                 camera.position.set( 0,10,0 ); 
-                controls.enabled = true;}, 3000);
-            
+                controls.enabled = true;}, 3000); 
             
         }
     }
@@ -472,7 +563,31 @@ function update() {
     
     if(sphereBody.position.y <= 4 && sphereBody.position.z > planes[2].position.z-50 && sphereBody.position.z < planes[2].position.z+50)
     {
-        //sphereBody.velocity = planesBody[2].velocity;
+        
+        if(der == false)
+        {
+            sphereBody.position.x += 0.3;
+        }
+
+        if(izq == false)
+        {
+            sphereBody.position.x -= 0.3;
+        }
+    }
+
+     
+    if(sphereBody.position.y <= 4 && sphereBody.position.z > planes[11].position.z-6.75 && sphereBody.position.z < planes[11].position.z+6.75)
+    {
+        
+        if(der == false)
+        {
+            sphereBody.position.z += 0.25;
+        }
+
+        if(det == false)
+        {
+            sphereBody.position.z -= 0.25;
+        }
     }
                                     
                 
