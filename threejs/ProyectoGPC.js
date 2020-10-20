@@ -187,20 +187,11 @@ function loadScene()
     loader.load("../images/objetosTeTiran.jpg", function(texture){
         texture.wrapS = texture.wrapY = THREE.RepeatWrapping;
         texture.repeat.set(10,10);
-        material = new THREE.MeshBasicMaterial({map: texture});
-    },
-        function(xhr){console.log((xhr.loaded/xhr.total*100)+'% loaded');
-},
-        function(xhr){console.log('An error happened');
-
-
+        material = new THREE.MeshLambertMaterial({map: loader});});
         
-        
-    });
-
+  
    
-   
-   //var material = new THREE.MeshBasicMaterial({color: 'red', wireframe:true});
+    //var material = new THREE.MeshBasicMaterial({color: 'red', wireframe:true});
    
     //Geometrías
     
@@ -365,7 +356,8 @@ function createPlane(tamCannon, position, geometry, material, horizontal)
 {   
     var planeBox = new CANNON.Box(tamCannon);
     plane =  new THREE.Mesh( geometry, material );
-
+    plane.castShadow = true;
+    plane.receiveShadow = true;
     if(horizontal)
         plane.rotation.x = 90*Math.PI/180;
 
@@ -590,7 +582,7 @@ function update() {
             controls.enabled = true;
             
             blocker2.style.display = 'none';       
-            
+             
             
         }, 3000); 
         setTimeout(function(){  
@@ -624,7 +616,8 @@ function update() {
                 controls.enabled = true;
                 
                 
-                blocker2.style.display = 'none';       
+                blocker2.style.display = 'none'; 
+                      
             
             
             }, 3000); 
@@ -639,8 +632,6 @@ function update() {
         }
     }
 
-    
-    
     if(sphereBody.position.y <= 4 && sphereBody.position.z > planes[2].position.z-50 && sphereBody.position.z < planes[2].position.z+50)
     {
         
