@@ -16,6 +16,7 @@ var der = false;
 var det = del = false;
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 var material;
+var muerte = false;
 if ( havePointerLock ) {
 
     var element = document.body;
@@ -111,7 +112,7 @@ function initPhysics(){
     sphereShape = new CANNON.Sphere(radius);
     sphereBody = new CANNON.Body({ mass: mass });
     sphereBody.addShape(sphereShape);
-    sphereBody.position.set(0,5,0);
+    sphereBody.position.set(0,5,-1);
                 
     sphereBody.linearDamping = 0.9;
     world.add(sphereBody);
@@ -132,7 +133,20 @@ function initVisual() {
 	camera.lookAt( new THREE.Vector3( 0,5,-50 ) );
     scene = new THREE.Scene();
     scene.fog = new THREE.Fog( 0x000000, 0, 500 );
-
+    /*var loader = new THREE.TextureLoader();
+    loader.load('../images/fondo.jpeg' , function(texture)
+            {
+             scene.background = texture;  
+            });*/
+    var cubeTexture = new THREE.CubeTextureLoader().setPath( '../images/' ).load( [
+        'piedras.jpg',
+        'piedras.jpg',
+        'piedras.jpg',
+        'piedras.jpg',
+        'piedras.jpg',
+        'piedras.jpg'
+        ] );
+           scene.background = cubeTexture;
     controls = new PointerLockControls( camera , sphereBody );
     scene.add( controls.getObject() );
 
@@ -144,19 +158,7 @@ function initVisual() {
                 
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setClearColor( 0xFFFFFF);
-    var loader = new THREE.TextureLoader();
-    loader.load('../images/fondo.jpeg' , function(texture)
-            {
-             scene.background = texture;  
-            });
-           /*scene.background = new THREE.CubeTextureLoader().setPath( '../images/' ).load( [
-                'fondo.jpg',
-                'fondo.jpg',
-                'fondo.jpg',
-                'fondo.jpg',
-                'fondo.jpg',
-                'plaformas2.jpg'
-                ] );*/
+    
     document.body.appendChild( renderer.domElement );
 
     window.addEventListener( 'resize', updateAspectRatio, false );
@@ -182,12 +184,21 @@ function loadScene()
    
     //Materiales
     var loader = new THREE.TextureLoader();
-    loader.load("../images/plataformas2.jpg", function(texture){
+    loader.load("../images/objetosTeTiran.jpg", function(texture){
         texture.wrapS = texture.wrapY = THREE.RepeatWrapping;
         texture.repeat.set(10,10);
-        material = new THREE.MeshBasicMaterial({map: texture}); 
+        material = new THREE.MeshBasicMaterial({map: texture});
+    },
+        function(xhr){console.log((xhr.loaded/xhr.total*100)+'% loaded');
+},
+        function(xhr){console.log('An error happened');
+
+
+        
         
     });
+
+   
    
    //var material = new THREE.MeshBasicMaterial({color: 'red', wireframe:true});
    
@@ -542,12 +553,12 @@ function startAnimation()
 function update() {
     var delta = reloj.getDelta();
     
-    if(aux != 0)
+    if(sphereBody.position.x == 0 && sphereBody.position.z == 0 && muerte == true)
     {
         cont++;
-        aux = 0;
+        muerte = false;
     }
-
+    
 
     if(controls.enabled)
         world.step(delta);
@@ -573,16 +584,24 @@ function update() {
         diedText.innerHTML = 'You died, number of attempts: ' + cont;
         //aux++;
        
-        //controls.enabled = false;
+        controls.enabled = false;
         setTimeout(function(){  
-            //controls.enabled = true;
-            camera.position.set( 0,10,0 ); 
-            sphereBody.position.set(0,6,0);
+           
+            controls.enabled = true;
             
             blocker2.style.display = 'none';       
             
             
         }, 3000); 
+        setTimeout(function(){  
+            
+            
+            camera.position.set( 0,10,0 ); 
+            sphereBody.position.set(0,6,0);     
+            
+            
+        }, 1000); 
+        muerte = true;
         /*initPhysics();
         initVisual();
         loadScene(); 
@@ -600,14 +619,22 @@ function update() {
             blocker2.style.display = 'box';
             diedText.innerHTML = 'You died, number of attempts: ' + cont;
             
+            controls.enabled = false;
             setTimeout(function(){  
-                aux++;
                 controls.enabled = true;
-                sphereBody.position.set(0,5,0);
-                camera.position.set( 0,10,0 ); 
-                blocker2.style.display = 'none';
                 
+                
+                blocker2.style.display = 'none';       
+            
+            
             }, 3000); 
+            setTimeout(function(){  
+                cont++;
+                camera.position.set( 0,10,0 ); 
+                sphereBody.position.set(0,6,0);     
+            
+            
+            }, 1000); 
             
         }
     }
