@@ -9,11 +9,13 @@ var cont = 1;
 var aux = 0;
 var blocker = document.getElementById( 'blocker' );
 var instructions = document.getElementById( 'instructions' );
+var blocker2 = document.getElementById( 'blocker2' );
+var diedText = document.getElementById( 'text' );
 var izq = false;
 var der = false;
 var det = del = false;
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-
+var material;
 if ( havePointerLock ) {
 
     var element = document.body;
@@ -68,7 +70,7 @@ if ( havePointerLock ) {
                         document.removeEventListener( 'fullscreenchange', fullscreenchange );
                         document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
 
-                            element.requestPointerLock();
+                        element.requestPointerLock();
                     }
 
                 }
@@ -94,7 +96,7 @@ if ( havePointerLock ) {
 
 initPhysics();
 initVisual();
-loadScene();
+loadScene(); 
 startAnimation();
 render();
 
@@ -109,10 +111,12 @@ function initPhysics(){
     sphereShape = new CANNON.Sphere(radius);
     sphereBody = new CANNON.Body({ mass: mass });
     sphereBody.addShape(sphereShape);
-    sphereBody.position.set(40,5,-890);
+    sphereBody.position.set(0,5,0);
                 
     sphereBody.linearDamping = 0.9;
     world.add(sphereBody);
+    spikesBody = [];
+    planesBody = [];
 
                 
 }
@@ -120,6 +124,8 @@ function initPhysics(){
 function initVisual() {
 
                 
+    spikes = [];
+    planes = [];
 
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
     camera.position.set( 0,10,0 );
@@ -138,11 +144,26 @@ function initVisual() {
                 
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setClearColor( 0xFFFFFF);
-
+    var loader = new THREE.TextureLoader();
+    loader.load('../images/fondo.jpeg' , function(texture)
+            {
+             scene.background = texture;  
+            });
+           /*scene.background = new THREE.CubeTextureLoader().setPath( '../images/' ).load( [
+                'fondo.jpg',
+                'fondo.jpg',
+                'fondo.jpg',
+                'fondo.jpg',
+                'fondo.jpg',
+                'plaformas2.jpg'
+                ] );*/
     document.body.appendChild( renderer.domElement );
 
     window.addEventListener( 'resize', updateAspectRatio, false );
     reloj.start();
+
+    var light = new THREE.AmbientLight( 0xFFFFFF ); // soft white light
+    scene.add( light );
                 
 }
 
@@ -158,9 +179,18 @@ var dt = 1/60;
 function loadScene()
 {
     //Cargar la escena con objetos
-
+   
     //Materiales
-    var material = new THREE.MeshBasicMaterial({color: 'red', wireframe:true});
+    var loader = new THREE.TextureLoader();
+    loader.load("../images/plataformas2.jpg", function(texture){
+        texture.wrapS = texture.wrapY = THREE.RepeatWrapping;
+        texture.repeat.set(10,10);
+        material = new THREE.MeshBasicMaterial({map: texture}); 
+        
+    });
+   
+   //var material = new THREE.MeshBasicMaterial({color: 'red', wireframe:true});
+   
     //Geometrías
     
     var geometry = new THREE.BoxGeometry(100,100,5);                                                                                                                                                                                                                                                                                                                                                                                                                        
@@ -169,7 +199,7 @@ function loadScene()
    
     createPlane(new CANNON.Vec3(50,50,2.5),new CANNON.Vec3(0,0,-150), geometry, material,true);
 
-    createPlane(new CANNON.Vec3(50,50,2.5),new CANNON.Vec3(0,0,-300), geometry, material,true); //2
+    createPlane(new CANNON.Vec3(50,50,2.5),new CANNON.Vec3(-100,0,-300), geometry, material,true); //2
    
 
     var geometry2 = new THREE.BoxGeometry(25,25,5);    
@@ -316,6 +346,8 @@ function loadScene()
     createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(15,15,-1120), geometry4, material,false); //15
 
 
+    createPlane(new CANNON.Vec3(50,50,2.5),new CANNON.Vec3(40,0,-1250), geometry, material,true);
+
 }
 
 function createPlane(tamCannon, position, geometry, material, horizontal)
@@ -350,6 +382,8 @@ function startAnimation()
     mvtoIzq1 = new TWEEN.Tween( planesBody[2].position ).to( {x: [-100],
         y: [0],
         z: [-300] }, 10000);
+
+    
   
     mvtoDer1.onComplete(function(){
 
@@ -382,29 +416,29 @@ function startAnimation()
         
     mvtoDer.start();
 
-    var mvtoDer = new TWEEN.Tween( planesBody[8].position ).to( {x: [40],
+    var mvtoDer2 = new TWEEN.Tween( planesBody[8].position ).to( {x: [40],
         y: [15],
         z: [-630] },5500 );
-    var mvtoIzq = new TWEEN.Tween( planesBody[8].position ).to( {x: [65],
+    var mvtoIzq2 = new TWEEN.Tween( planesBody[8].position ).to( {x: [65],
         y: [15],
         z: [-630] }, 5500 );
 
-    mvtoDer.chain( mvtoIzq );
-    mvtoIzq.chain( mvtoDer );
+    mvtoDer2.chain( mvtoIzq2 );
+    mvtoIzq2.chain( mvtoDer2 );
         
-    mvtoDer.start();
+    mvtoDer2.start();
 
-    var mvtoDer = new TWEEN.Tween( planesBody[9].position ).to( {x: [40],
+    var mvtoDer3 = new TWEEN.Tween( planesBody[9].position ).to( {x: [40],
         y: [15],
         z: [-660] },6000 );
-    var mvtoIzq = new TWEEN.Tween( planesBody[9].position ).to( {x: [65],
+    var mvtoIzq3 = new TWEEN.Tween( planesBody[9].position ).to( {x: [65],
         y: [15],
         z: [-660] }, 6000 );
 
-    mvtoDer.chain( mvtoIzq );
-    mvtoIzq.chain( mvtoDer );
+    mvtoDer3.chain( mvtoIzq3 );
+    mvtoIzq3.chain( mvtoDer3 );
         
-    mvtoDer.start();
+    mvtoDer3.start();
     
 
     for(var i = 0; i < 2; i++)
@@ -424,18 +458,18 @@ function startAnimation()
     
     for(var i = 2; i < spikesBody.length; i++)
     {
-        var mvtoArriba = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
+        var mvtoArriba1 = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
             y: [2],
             z: [spikesBody[i].position.z] },1000 );
-        var mvtoAbajo = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
+        var mvtoAbajo1 = new TWEEN.Tween( spikesBody[i].position ).to( {x: [40],
             y: [-15],
             z: [spikesBody[i].position.z] }, 5000 );
     
-        mvtoArriba.chain( mvtoAbajo );
-        mvtoAbajo.chain( mvtoArriba );
+        mvtoArriba1.chain( mvtoAbajo1 );
+        mvtoAbajo1.chain( mvtoArriba1 );
                 
-        mvtoArriba.start();
-        mvtoArriba.delay(4000);
+        mvtoArriba1.start();
+        mvtoArriba1.delay(4000);
     }
     
     var mvtoDel = new TWEEN.Tween( planesBody[11].position ).to( {x: [40],
@@ -464,41 +498,41 @@ function startAnimation()
 
     });
 
-    var mvtoDer = new TWEEN.Tween( planesBody[13].position ).to( {x: [15],
+    var mvtoDer4 = new TWEEN.Tween( planesBody[13].position ).to( {x: [15],
         y: [15],
         z: [-1060] },5000 );
-    var mvtoIzq = new TWEEN.Tween( planesBody[13].position ).to( {x: [65],
+    var mvtoIzq4 = new TWEEN.Tween( planesBody[13].position ).to( {x: [65],
         y: [15],
         z: [-1060] }, 5000 );
 
-    mvtoDer.chain( mvtoIzq );
-    mvtoIzq.chain( mvtoDer );
-    mvtoIzq.delay(2000);
-    mvtoDer.start();
+    mvtoDer4.chain( mvtoIzq4 );
+    mvtoIzq4.chain( mvtoDer4 );
+    mvtoIzq4.delay(2000);
+    mvtoDer4.start();
 
-    var mvtoDer = new TWEEN.Tween( planesBody[14].position ).to( {x: [15],
+    var mvtoDer5 = new TWEEN.Tween( planesBody[14].position ).to( {x: [15],
         y: [15],
         z: [-1090] },5500 );
-    var mvtoIzq = new TWEEN.Tween( planesBody[14].position ).to( {x: [65],
+    var mvtoIzq5 = new TWEEN.Tween( planesBody[14].position ).to( {x: [65],
         y: [15],
         z: [-1090] }, 5500 );
 
-    mvtoDer.chain( mvtoIzq );
-    mvtoIzq.chain( mvtoDer );
-    mvtoIzq.delay(2000);
-    mvtoDer.start();
+    mvtoDer5.chain( mvtoIzq5 );
+    mvtoIzq5.chain( mvtoDer5 );
+    mvtoIzq5.delay(2000);
+    mvtoDer5.start();
 
-    var mvtoDer = new TWEEN.Tween( planesBody[15].position ).to( {x: [15],
+    var mvtoDer6 = new TWEEN.Tween( planesBody[15].position ).to( {x: [15],
         y: [15],
         z: [-1120] },6000 );
-    var mvtoIzq = new TWEEN.Tween( planesBody[15].position ).to( {x: [65],
+    var mvtoIzq6 = new TWEEN.Tween( planesBody[15].position ).to( {x: [65],
         y: [15],
         z: [-1120] }, 6000 );
 
-    mvtoDer.chain( mvtoIzq );
-    mvtoIzq.chain( mvtoDer );
-    mvtoIzq.delay(2000); 
-    mvtoDer.start();
+    mvtoDer6.chain( mvtoIzq6 );
+    mvtoIzq6.chain( mvtoDer6 );
+    mvtoIzq6.delay(2000); 
+    mvtoDer6.start();
 
 }        
 
@@ -508,29 +542,23 @@ function startAnimation()
 function update() {
     var delta = reloj.getDelta();
     
+    if(aux != 0)
+    {
+        cont++;
+        aux = 0;
+    }
+
+
     if(controls.enabled)
         world.step(delta);
 
+    //console.log(planesBody[2].velocity);
     for(var i = 0; i < planes.length; i++)
     {
         planes[i].position.copy(planesBody[i].position);
+        planes[i].quaternion.copy(planesBody[i].quaternion);
     }
-    /*planes[2].position.copy(planesBody[2].position);
-    planes[2].quaternion.copy(planesBody[2].quaternion);
-    planes[7].position.copy(planesBody[7].position);
-    planes[7].quaternion.copy(planesBody[7].quaternion);
-    planes[8].position.copy(planesBody[8].position);
-    planes[8].quaternion.copy(planesBody[8].quaternion);
-    planes[9].position.copy(planesBody[9].position);
-    planes[9].quaternion.copy(planesBody[9].quaternion);
-    planes[11].position.copy(planesBody[11].position);
-    planes[11].quaternion.copy(planesBody[11].quaternion);
-    planes[13].position.copy(planesBody[13].position);
-    planes[13].quaternion.copy(planesBody[13].quaternion);
-    planes[14].position.copy(planesBody[14].position);
-    planes[14].quaternion.copy(planesBody[14].quaternion);
-    planes[15].position.copy(planesBody[15].position);
-    planes[15].quaternion.copy(planesBody[15].quaternion);*/
+    
     for(var i = 0; i < spikes.length; i++)
     {
         spikes[i].position.copy(spikesBody[i].position);
@@ -539,10 +567,26 @@ function update() {
 
     if(sphereBody.position.y < -20)
     {
-        sphereBody.position.set(0,5,0);
-        camera.position.set( 0,10,0 );
-        mvtoDer1.stop();
-        mvtoDer1.start();
+        blocker2.style.display = '-webkit-box';
+        blocker2.style.display = '-moz-box';
+        blocker2.style.display = 'box';
+        diedText.innerHTML = 'You died, number of attempts: ' + cont;
+        //aux++;
+       
+        //controls.enabled = false;
+        setTimeout(function(){  
+            //controls.enabled = true;
+            camera.position.set( 0,10,0 ); 
+            sphereBody.position.set(0,6,0);
+            
+            blocker2.style.display = 'none';       
+            
+            
+        }, 3000); 
+        /*initPhysics();
+        initVisual();
+        loadScene(); 
+        startAnimation(); */
         
     }
     
@@ -551,10 +595,19 @@ function update() {
         if(sphereBody.position.z < spikes[i].position.z+10 && sphereBody.position.z > spikes[i].position.z-10 && sphereBody.position.x > planes[10].position.x - 6.75 && sphereBody.position.x < planes[10].position.x + 6.75 && sphereBody.position.y <= 5 && spikes[i].position.y >= -8)
         {
             controls.enabled = false;
+            blocker2.style.display = '-webkit-box';
+            blocker2.style.display = '-moz-box';
+            blocker2.style.display = 'box';
+            diedText.innerHTML = 'You died, number of attempts: ' + cont;
+            
             setTimeout(function(){  
+                aux++;
+                controls.enabled = true;
                 sphereBody.position.set(0,5,0);
                 camera.position.set( 0,10,0 ); 
-                controls.enabled = true;}, 3000); 
+                blocker2.style.display = 'none';
+                
+            }, 3000); 
             
         }
     }
@@ -566,12 +619,12 @@ function update() {
         
         if(der == false)
         {
-            sphereBody.position.x += 0.3;
+            sphereBody.velocity.x += 0.8;
         }
 
-        if(izq == false)
+        else
         {
-            sphereBody.position.x -= 0.3;
+            sphereBody.velocity.x -= 0.8;
         }
     }
 
@@ -581,13 +634,31 @@ function update() {
         
         if(der == false)
         {
-            sphereBody.position.z += 0.25;
+            sphereBody.position.z -= 0.2;
         }
 
-        if(det == false)
+        else
         {
-            sphereBody.position.z -= 0.25;
+            sphereBody.position.z += 0.2;
         }
+    }
+
+    if(sphereBody.position.y <= 4 && sphereBody.position.z > planes[planes.length-1].position.z-30 && sphereBody.position.z < planes[planes.length-1].position.z+30)
+    {
+        
+    
+        blocker2.style.display = '-webkit-box';
+        blocker2.style.display = '-moz-box';
+        blocker2.style.display = 'box';
+        diedText.innerHTML = 'You win, number of attempts: ' + cont;
+        setTimeout(function(){  
+            
+            sphereBody.position.set(0,5,0);
+            camera.position.set( 0,10,0 ); 
+            blocker2.style.display = 'none';
+            cont = 1;
+            
+        }, 5000); 
     }
                                     
                 

@@ -54,6 +54,45 @@
                 cursor: pointer;
 
             }
+            #blocker2 {
+
+position: absolute;
+
+width: 100%;
+height: 100%;
+
+background-color: rgba(0,0,0,0.5);
+display: none;
+
+}
+
+#instructions2 {
+
+width: 100%;
+height: 100%;
+
+display: -webkit-box;
+display: -moz-box;
+display: box;
+
+-webkit-box-orient: horizontal;
+-moz-box-orient: horizontal;
+box-orient: horizontal;
+
+-webkit-box-pack: center;
+-moz-box-pack: center;
+box-pack: center;
+
+-webkit-box-align: center;
+-moz-box-align: center;
+box-align: center;
+
+color: #ffffff;
+text-align: center;
+
+cursor: pointer;
+
+}
 
        
 		</style>
@@ -67,6 +106,14 @@
                 <span style="font-size:40px">Click to play</span>
                 <br />
                 (W,A,S,D = Move, SPACE = Jump, MOUSE = Look)
+            </div>
+
+        </div>
+        <div id="blocker2">
+
+            <div id="instructions2">
+                <span id="text" style="font-size:40px"></span>
+                
             </div>
 
         </div>
