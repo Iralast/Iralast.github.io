@@ -128,9 +128,24 @@ function initVisual() {
     spikes = [];
     planes = [];
 
-    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 500 );
     camera.position.set( 0,10,0 );
-	camera.lookAt( new THREE.Vector3( 0,5,-50 ) );
+    camera.lookAt( new THREE.Vector3( 0,5,-50 ) );
+    var listener = new THREE.AudioListener();
+    listener.autoplay = true;
+    camera.add( listener );
+
+    // create a global audio source
+    var sound = new THREE.Audio( listener );
+
+    // load a sound and set it as the Audio object's buffer
+    var audioLoader = new THREE.AudioLoader();
+    audioLoader.load( '../sounds/sound.mp3', function( buffer ) {
+        sound.setBuffer( buffer );
+        sound.setLoop( true );
+        sound.setVolume( 0.5 );
+        sound.play();
+    });
     scene = new THREE.Scene();
     scene.fog = new THREE.Fog( 0x000000, 0, 500 );
     /*var loader = new THREE.TextureLoader();
@@ -181,15 +196,19 @@ var dt = 1/60;
 function loadScene()
 {
     //Cargar la escena con objetos
-   
+    
     //Materiales
     var loader = new THREE.TextureLoader();
     loader.load("../images/objetosTeTiran.jpg", function(texture){
         texture.wrapS = texture.wrapY = THREE.RepeatWrapping;
-        texture.repeat.set(10,10);
-        material = new THREE.MeshLambertMaterial({map: loader});});
+        //texture.repeat.set(0.25,0.25);
         
-  
+        material = new THREE.MeshLambertMaterial({map: texture});
+        
+
+    });
+        
+    console.log(loader);
    
     //var material = new THREE.MeshBasicMaterial({color: 'red', wireframe:true});
    
@@ -555,7 +574,7 @@ function update() {
     if(controls.enabled)
         world.step(delta);
 
-    //console.log(planesBody[2].velocity);
+    
     for(var i = 0; i < planes.length; i++)
     {
         planes[i].position.copy(planesBody[i].position);
@@ -622,12 +641,14 @@ function update() {
             
             }, 3000); 
             setTimeout(function(){  
-                cont++;
+                
                 camera.position.set( 0,10,0 ); 
                 sphereBody.position.set(0,6,0);     
             
             
             }, 1000); 
+
+            muerte = true;
             
         }
     }
