@@ -76,7 +76,7 @@ if ( havePointerLock ) {
 
                 }
 
-                document.addEventListener( 'fullscreenchange', fullscreenchange, false );
+               document.addEventListener( 'fullscreenchange', fullscreenchange, false );
                 document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
                 element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
                 element.requestFullscreen();
@@ -198,17 +198,13 @@ function loadScene()
     //Cargar la escena con objetos
     
     //Materiales
-    var loader = new THREE.TextureLoader();
-    loader.load("../images/objetosTeTiran.jpg", function(texture){
+    var loader = new THREE.TextureLoader().load("../images/plataformas.jpg", function(texture){
         texture.wrapS = texture.wrapY = THREE.RepeatWrapping;
-        //texture.repeat.set(0.25,0.25);
+        texture.repeat.set(1,2);
         
-        material = new THREE.MeshLambertMaterial({map: texture});
-        
-
     });
         
-    console.log(loader);
+    material = new THREE.MeshLambertMaterial({map: loader});
    
     //var material = new THREE.MeshBasicMaterial({color: 'red', wireframe:true});
    
@@ -568,6 +564,7 @@ function update() {
     {
         cont++;
         muerte = false;
+        
     }
     
 
