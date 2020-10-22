@@ -170,6 +170,7 @@ function initVisual() {
     document.getElementById( 'container' ).appendChild( stats.domElement );
 
     renderer = new THREE.WebGLRenderer();
+    renderer.shadowMap.enabled = true;
                 
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setClearColor( 0xFFFFFF);
@@ -182,17 +183,6 @@ function initVisual() {
     var light = new THREE.AmbientLight( 0xFFFFFF,2.0); // soft white light
     scene.add( light );
 
-    var luzPuntual = new THREE.PointLight(0xFFFFFF,1.0);
-	luzPuntual.position.set( sphereBody.position );
-    scene.add( luzPuntual );
-
-    var luzFocal = new THREE.SpotLight(0xFFFFFF,0.5);
-	luzFocal.position.set( 80,50,-500 );
-	luzFocal.target.position.set(40,0,-500);
-	luzFocal.penumbra = 0.2;
-	luzFocal.castShadow = true;
-    scene.add(luzFocal);
-                
 }
 
 function updateAspectRatio()
@@ -233,8 +223,8 @@ function loadScene()
     });
     var material = new THREE.MeshLambertMaterial({map: loader4});
     var materialPequenyas = new THREE.MeshLambertMaterial({map: loader});
-    var materialParedes = new THREE.MeshPhongMaterial({map: loader2});
-    var materialAlargado = new THREE.MeshPhongMaterial({map: loader3});
+    var materialParedes = new THREE.MeshLambertMaterial({map: loader2});
+    var materialAlargado = new THREE.MeshLambertMaterial({map: loader3});
    
     //var material = new THREE.MeshBasicMaterial({color: 'red', wireframe:true});
    
@@ -570,6 +560,7 @@ function update() {
     {
         cont++;
         muerte = false;
+        //startAnimation();
         
     }
 
@@ -577,6 +568,7 @@ function update() {
     {
         cont = 1;
         ganado = false;
+        //startAnimation();
         
     }
     
