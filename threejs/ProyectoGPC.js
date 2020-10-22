@@ -13,10 +13,10 @@ var blocker2 = document.getElementById( 'blocker2' );
 var diedText = document.getElementById( 'text' );
 var izq = false;
 var der = false;
-var det = del = false;
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 var material;
 var muerte = false;
+var ganado = false;
 if ( havePointerLock ) {
 
     var element = document.body;
@@ -179,8 +179,19 @@ function initVisual() {
     window.addEventListener( 'resize', updateAspectRatio, false );
     reloj.start();
 
-    var light = new THREE.AmbientLight( 0xFFFFFF ); // soft white light
+    var light = new THREE.AmbientLight( 0xFFFFFF,2.0); // soft white light
     scene.add( light );
+
+    var luzPuntual = new THREE.PointLight(0xFFFFFF,1.0);
+	luzPuntual.position.set( sphereBody.position );
+    scene.add( luzPuntual );
+
+    var luzFocal = new THREE.SpotLight(0xFFFFFF,0.5);
+	luzFocal.position.set( 80,50,-500 );
+	luzFocal.target.position.set(40,0,-500);
+	luzFocal.penumbra = 0.2;
+	luzFocal.castShadow = true;
+    scene.add(luzFocal);
                 
 }
 
@@ -198,13 +209,32 @@ function loadScene()
     //Cargar la escena con objetos
     
     //Materiales
-    var loader = new THREE.TextureLoader().load("../images/plataformas.jpg", function(texture){
+    
+    var loader = new THREE.TextureLoader().load("../images/plataforma2.jpeg", function(texture){
         texture.wrapS = texture.wrapY = THREE.RepeatWrapping;
-        texture.repeat.set(1,2);
+        
         
     });
+
+    var loader3 = new THREE.TextureLoader().load("../images/arrow.jpg", function(texture){
+        texture.wrapS = texture.wrapY = THREE.RepeatWrapping;
         
-    material = new THREE.MeshLambertMaterial({map: loader});
+        
+    });
+
+    var loader2 = new THREE.TextureLoader().load("../images/objetosTeTiran.jpg", function(texture){
+        texture.wrapS = texture.wrapY = THREE.RepeatWrapping;
+        
+    });
+
+    var loader4 = new THREE.TextureLoader().load("../images/plataformasGrandes.jpg", function(texture){
+       // texture.wrapS = texture.wrapY = THREE.RepeatWrapping;
+        
+    });
+    var material = new THREE.MeshLambertMaterial({map: loader4});
+    var materialPequenyas = new THREE.MeshLambertMaterial({map: loader});
+    var materialParedes = new THREE.MeshPhongMaterial({map: loader2});
+    var materialAlargado = new THREE.MeshPhongMaterial({map: loader3});
    
     //var material = new THREE.MeshBasicMaterial({color: 'red', wireframe:true});
    
@@ -221,22 +251,22 @@ function loadScene()
 
     var geometry2 = new THREE.BoxGeometry(25,25,5);    
 
-    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(-40,0,-400), geometry2, material,true);
-    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(-3,0,-460), geometry2, material,true);
-    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(40,0,-510), geometry2, material,true);
+    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(-40,0,-400), geometry2, materialPequenyas,true);
+    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(-3,0,-460), geometry2, materialPequenyas,true);
+    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(40,0,-510), geometry2, materialPequenyas,true);
 
   
 
     var geometry3 = new THREE.BoxGeometry(25,150,5);  
 
-    createPlane(new CANNON.Vec3(12.5,75,2.5),new CANNON.Vec3(40,0,-630), geometry3, material,true);
+    createPlane(new CANNON.Vec3(12.5,75,2.5),new CANNON.Vec3(40,0,-630), geometry3, materialAlargado,true);
 
     var geometry4 = new THREE.BoxGeometry(25,25,30);  
-    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(65,15,-600), geometry4, material,false);  //7
-    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(65,15,-630), geometry4, material,false);  //8
-    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(65,15,-660), geometry4, material,false); //9
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(65,15,-600), geometry4, materialParedes,false);  //7
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(65,15,-630), geometry4, materialParedes,false);  //8
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(65,15,-660), geometry4, materialParedes,false); //9
  
-    createPlane(new CANNON.Vec3(12.5,75,2.5),new CANNON.Vec3(40,0,-820), geometry3, material,true);
+    createPlane(new CANNON.Vec3(12.5,75,2.5),new CANNON.Vec3(40,0,-820), geometry3, materialAlargado,true);
 
     var loader = new THREE.ObjectLoader();
     loader.load('models/spikes-threejs/spikes.json', 
@@ -354,13 +384,13 @@ function loadScene()
     
     world.add(planeBody2);
 
-    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(40,0,-940), geometry2, material,true);//11
-    createPlane(new CANNON.Vec3(12.5,75,2.5),new CANNON.Vec3(40,0,-1090), geometry3, material,true);
+    createPlane(new CANNON.Vec3(12.5,25,2.5),new CANNON.Vec3(40,0,-960), geometry2, materialPequenyas,true);//11
+    createPlane(new CANNON.Vec3(12.5,75,2.5),new CANNON.Vec3(40,0,-1090), geometry3, materialAlargado,true);
 
     var geometry4 = new THREE.BoxGeometry(25,25,30);  
-    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(15,15,-1060), geometry4, material,false);  //13
-    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(15,15,-1090), geometry4, material,false);  //14
-    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(15,15,-1120), geometry4, material,false); //15
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(15,15,-1060), geometry4, materialParedes,false);  //13
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(65,15,-1090), geometry4, materialParedes,false);  //14
+    createPlane(new CANNON.Vec3(13,12.5,15),new CANNON.Vec3(15,15,-1120), geometry4, materialParedes,false); //15
 
 
     createPlane(new CANNON.Vec3(50,50,2.5),new CANNON.Vec3(40,0,-1250), geometry, material,true);
@@ -490,31 +520,7 @@ function startAnimation()
         mvtoArriba1.delay(4000);
     }
     
-    var mvtoDel = new TWEEN.Tween( planesBody[11].position ).to( {x: [40],
-        y: [0],
-        z: [-940] },8000 );
-    var mvtoDet = new TWEEN.Tween( planesBody[11].position ).to( {x: [40],
-        y: [0],
-        z: [-1000] }, 8000 );
-
-    mvtoDel.chain( mvtoDet );
-    mvtoDet.chain( mvtoDel );
-        
-    mvtoDel.start();
-
-    mvtoDel.onComplete(function(){
-
-        del = true;
-        det = false;
-
-    });
-
-    mvtoDet.onComplete(function(){
-
-        del = false;
-        det = true;
-
-    });
+  
 
     var mvtoDer4 = new TWEEN.Tween( planesBody[13].position ).to( {x: [15],
         y: [15],
@@ -525,7 +531,7 @@ function startAnimation()
 
     mvtoDer4.chain( mvtoIzq4 );
     mvtoIzq4.chain( mvtoDer4 );
-    mvtoIzq4.delay(2000);
+    mvtoIzq4.delay(1000);
     mvtoDer4.start();
 
     var mvtoDer5 = new TWEEN.Tween( planesBody[14].position ).to( {x: [15],
@@ -534,11 +540,11 @@ function startAnimation()
     var mvtoIzq5 = new TWEEN.Tween( planesBody[14].position ).to( {x: [65],
         y: [15],
         z: [-1090] }, 5500 );
-
+    
     mvtoDer5.chain( mvtoIzq5 );
     mvtoIzq5.chain( mvtoDer5 );
-    mvtoIzq5.delay(2000);
-    mvtoDer5.start();
+    mvtoDer5.delay(1000);
+    mvtoIzq5.start();
 
     var mvtoDer6 = new TWEEN.Tween( planesBody[15].position ).to( {x: [15],
         y: [15],
@@ -549,7 +555,7 @@ function startAnimation()
 
     mvtoDer6.chain( mvtoIzq6 );
     mvtoIzq6.chain( mvtoDer6 );
-    mvtoIzq6.delay(2000); 
+    mvtoIzq6.delay(1000); 
     mvtoDer6.start();
 
 }        
@@ -564,6 +570,13 @@ function update() {
     {
         cont++;
         muerte = false;
+        
+    }
+
+    if(sphereBody.position.x == 0 && sphereBody.position.z == 0 && ganado == true)
+    {
+        cont = 1;
+        ganado = false;
         
     }
     
@@ -619,7 +632,7 @@ function update() {
     
     for(var i = 0; i < spikes.length; i++)
     {
-        if(sphereBody.position.z < spikes[i].position.z+10 && sphereBody.position.z > spikes[i].position.z-10 && sphereBody.position.x > planes[10].position.x - 6.75 && sphereBody.position.x < planes[10].position.x + 6.75 && sphereBody.position.y <= 5 && spikes[i].position.y >= -8)
+        if(sphereBody.position.z < spikes[i].position.z+10 && sphereBody.position.z > spikes[i].position.z-10 && sphereBody.position.x > planes[10].position.x - 6.75 && sphereBody.position.x < planes[10].position.x + 6.75 && spikes[i].position.y >= -8)
         {
             controls.enabled = false;
             blocker2.style.display = '-webkit-box';
@@ -664,20 +677,6 @@ function update() {
         }
     }
 
-     
-    if(sphereBody.position.y <= 4 && sphereBody.position.z > planes[11].position.z-6.75 && sphereBody.position.z < planes[11].position.z+6.75)
-    {
-        
-        if(der == false)
-        {
-            sphereBody.position.z -= 0.2;
-        }
-
-        else
-        {
-            sphereBody.position.z += 0.2;
-        }
-    }
 
     if(sphereBody.position.y <= 4 && sphereBody.position.z > planes[planes.length-1].position.z-30 && sphereBody.position.z < planes[planes.length-1].position.z+30)
     {
@@ -687,14 +686,25 @@ function update() {
         blocker2.style.display = '-moz-box';
         blocker2.style.display = 'box';
         diedText.innerHTML = 'You win, number of attempts: ' + cont;
+        //controls.enabled = false;
+        setTimeout(function(){  
+            //controls.enabled = true;
+            
+            
+            blocker2.style.display = 'none'; 
+            
+        
+        
+        }, 4000); 
         setTimeout(function(){  
             
-            sphereBody.position.set(0,5,0);
             camera.position.set( 0,10,0 ); 
-            blocker2.style.display = 'none';
-            cont = 1;
-            
-        }, 5000); 
+            sphereBody.position.set(0,6,0);   
+            ganado = true;  
+        
+        
+        }, 2000); 
+
     }
                                     
                 

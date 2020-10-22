@@ -82,9 +82,9 @@ function init()
     var luzFocal = new THREE.SpotLight(0xFFFFFF,0.5);
 	luzFocal.position.set( -30,500,1 );
 	luzFocal.target.position.set(-100,0,-100);
-	//luzFocal.angle = Math.PI/10;
 	luzFocal.penumbra = 0.2;
-	luzFocal.castShadow = true;
+    luzFocal.castShadow = true;
+    luzFocal.shadow.camera.far = 4000;
     scene.add(luzFocal);
 
     
