@@ -132,7 +132,7 @@ function initVisual() {
     camera.position.set( 0,10,0 );
     camera.lookAt( new THREE.Vector3( 0,5,-50 ) );
     var listener = new THREE.AudioListener();
-    listener.autoplay = true;
+   
     camera.add( listener );
 
     // create a global audio source
@@ -145,14 +145,11 @@ function initVisual() {
         sound.setLoop( true );
         sound.setVolume( 0.5 );
         sound.play();
+        sound.autoplay = true;
     });
     scene = new THREE.Scene();
     scene.fog = new THREE.Fog( 0x000000, 0, 500 );
-    /*var loader = new THREE.TextureLoader();
-    loader.load('../images/fondo.jpeg' , function(texture)
-            {
-             scene.background = texture;  
-            });*/
+   
     var cubeTexture = new THREE.CubeTextureLoader().setPath( '../images/' ).load( [
         'piedras.jpg',
         'piedras.jpg',
@@ -161,7 +158,7 @@ function initVisual() {
         'piedras.jpg',
         'piedras.jpg'
         ] );
-           scene.background = cubeTexture;
+    scene.background = cubeTexture;
     controls = new PointerLockControls( camera , sphereBody );
     scene.add( controls.getObject() );
 
