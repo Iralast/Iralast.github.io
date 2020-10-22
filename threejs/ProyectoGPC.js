@@ -131,23 +131,9 @@ function initVisual() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 500 );
     camera.position.set( 0,10,0 );
     camera.lookAt( new THREE.Vector3( 0,5,-50 ) );
-    var listener = new THREE.AudioListener();
    
-    camera.add( listener );
-
-    // create a global audio source
-    var sound = new THREE.Audio( listener );
-
-    // load a sound and set it as the Audio object's buffer
-    var audioLoader = new THREE.AudioLoader();
-    audioLoader.load( '../sounds/sound.mp3', function( buffer ) {
-        sound.setBuffer( buffer );
-        sound.setLoop( true );
-        sound.setVolume( 0.5 );
-        sound.play();
-        sound.autoplay = true;
-    });
     scene = new THREE.Scene();
+// scene.add(sound);
     scene.fog = new THREE.Fog( 0x000000, 0, 500 );
    
     var cubeTexture = new THREE.CubeTextureLoader().setPath( '../images/' ).load( [
@@ -196,6 +182,24 @@ function loadScene()
     //Cargar la escena con objetos
     
     //Materiales
+
+    var listener = new THREE.AudioListener();
+    listener.autoplay = true;
+    camera.add( listener );
+
+    // create a global audio source
+    var sound = new THREE.Audio( listener );
+
+    // load a sound and set it as the Audio object's buffer
+    var audioLoader = new THREE.AudioLoader();
+    audioLoader.load( '../sounds/sound.mp3', function( buffer ) {
+        sound.setBuffer( buffer );
+        sound.setLoop( true );
+        sound.setVolume( 0.5 );
+        sound.play();
+        
+        
+    });    
     
     var loader = new THREE.TextureLoader().load("../images/plataforma2.jpeg", function(texture){
         texture.wrapS = texture.wrapY = THREE.RepeatWrapping;
@@ -381,6 +385,13 @@ function loadScene()
 
 
     createPlane(new CANNON.Vec3(50,50,2.5),new CANNON.Vec3(40,0,-1250), geometry, material,true);
+
+    document.documentElement.addEventListener(
+        "mousedown", function(){
+          mouse_IsDown = true;
+          if (listener.context.state !== 'running') {
+          listener.context.resume();
+        }})
 
 }
 
