@@ -166,6 +166,16 @@ function initVisual() {
     var light = new THREE.AmbientLight( 0xFFFFFF,2.0); // soft white light
     scene.add( light );
 
+
+    var luzFocal = new THREE.SpotLight(0xFFFFFF,2.0);
+	luzFocal.position.set( 40,300,-1400 );
+	luzFocal.target.position.set(0,0,0);
+	luzFocal.penumbra = 0.2;
+    luzFocal.castShadow = true;
+    luzFocal.shadow.camera.far = 1400;
+    scene.add(luzFocal);
+
+
 }
 
 function updateAspectRatio()
