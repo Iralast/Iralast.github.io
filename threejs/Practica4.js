@@ -372,19 +372,19 @@ new THREE.Face3(4+8, 5+8, 1+8),
     keyboard.domElement.addEventListener('keydown', function (event) {
         if (keyboard.eventMatches(event, 'left')) {
             robot.position.z -= 10;
-            planta.position.z -= 10;
+           // planta.position.z -= 10;
         }
         if (keyboard.eventMatches(event, 'right')) {
             robot.position.z += 10;
-            planta.position.z += 10;
+            //planta.position.z += 10;
         }
         if (keyboard.eventMatches(event, 'up')) {
             robot.position.x += 10;
-            planta.position.x += 10;
+            //planta.position.x += 10;
         }
         if (keyboard.eventMatches(event, 'down')) {
             robot.position.x -= 10;
-            planta.position.x -= 10;
+            //planta.position.x -= 10;
         }
     })
     scene.add( new THREE.AxesHelper(500));
